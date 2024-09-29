@@ -1,15 +1,10 @@
 import React from "react";
 import "./css/App.css";
 
-
-
 function App() {
-  return (
-    <>
-    
-
-    </>
-  );
+  return <>
+  
+  </>;
 }
 
 export default App;
