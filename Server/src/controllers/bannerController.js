@@ -1,4 +1,4 @@
-
+import bannerService from '../services/bannerService';
 
 let createNewBanner = async (req, res) => {
     try {
@@ -26,7 +26,21 @@ let getDetailBanner = async (req, res) => {
     }
 }
 
+let getAllBanner = async (req, res) => {
+    try {
+        let data = await bannerService.getAllBanner(req.query);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 module.exports = {
     createNewBanner: createNewBanner,
-    getDetailBanner: getDetailBanner
+    getDetailBanner: getDetailBanner,
+    getAllBanner: getAllBanner
 }
