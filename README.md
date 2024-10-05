@@ -1,1 +1,1 @@
-Controler
+model
