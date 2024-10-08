@@ -154,7 +154,7 @@ const Header = (props) => {
                 <div className="col-lg-3 pr-0">
                   <ul className="nav navbar-nav navbar-right right_nav pull-right">
                     <li className="nav-item">
-                      <Link to={"/user/messenger"} className="icons">
+                      <Link to='' className="icons">
                         <i class="fa-brands fa-facebook-messenger"></i>
                       </Link>
                       {quantityMessage > 0 && (

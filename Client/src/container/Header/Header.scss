@@ -1,43 +1,115 @@
+// Define reusable variables for colors and other styles
+$primary-color: #ee4266;
+$white-color: #fff;
+$header-height: 70px;
+$box-size: 15px;
+
 .main_menu {
+  // Smooth transitions for width and top changes
   transition: width 2s, top 4s;
+
   &.sticky {
     position: fixed;
     width: 100%;
-    top: -70px;
-    transform: translateY(70px);
+    top: 0;
+    transform: translateY(0);
     transition: transform 500ms ease;
     left: 0;
-    box-shadow: 0px 3px 16px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 3px 16px rgba(0, 0, 0, 0.1);
+    z-index: 100; // Ensure it stays on top
   }
 
-  .box-quantity-cart {
-    border-radius: 50%;
-    width: 15px;
-    height: 15px;
-    background-color: #ee4266;
-    color: #fff;
-    line-height: 15px;
-    text-align: center;
-    display: block;
-    position: absolute;
-    top: 25px;
-    right: 29px;
-    font-size: 12px;
-  }
+  // Cart quantity bubble
+  .box-quantity-cart,
   .box-message-quantity {
     border-radius: 50%;
-    width: 20px;
-    height: 15px;
-    background-color: #ee4266;
-    color: #fff;
-    line-height: 15px;
+    background-color: $primary-color;
+    color: $white-color;
     text-align: center;
+    line-height: $box-size;
+    font-size: 12px;
     display: block;
     position: absolute;
+  }
+
+  // Specific styles for cart quantity bubble
+  .box-quantity-cart {
+    width: $box-size;
+    height: $box-size;
+    top: 25px;
+    right: 29px;
+  }
+
+  // Specific styles for message quantity bubble
+  .box-message-quantity {
+    width: 20px;
+    height: $box-size;
     top: 25px;
     right: 65px;
-    font-size: 12px;
   }
 }
+///////////////////////////////////////////////////////////
 
+.top_menu {
+  
+  background-color: #f8f9fa; // Light background for the top menu
+  padding: 10px 0;
+  border-bottom: 1px solid #eaeaea;
+
+  .container {
+    .row {
+      // Styling for the left section (phone and email info)
+      .float-left {
+        p {
+          margin: 0;
+          padding-right: 20px;
+          font-size: 14px;
+          color: #333; // Darker text color for contrast
+          display: inline-block;
+        }
+      }
+
+      // Styling for the right section (user menu and language)
+      .float-right {
+        .right_side {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          align-items: center;
+
+          li {
+            margin-left: 20px;
+            font-size: 14px;
+            color: #007bff; // Default link color
+
+            a {
+              text-decoration: none;
+              color: inherit; // Inherit color from the parent
+              transition: color 0.3s;
+
+              &:hover {
+                color: #0056b3; // Darker blue on hover
+              }
+            }
+
+            &:nth-child(2) {
+              // Add styles for logout link if needed
+              color: red;
+
+              a:hover {
+                color: darkred;
+              }
+            }
+
+            &:last-child {
+              // Language switcher styles
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
