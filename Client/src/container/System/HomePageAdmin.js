@@ -7,12 +7,14 @@ function HomePageAdmin(props) {
       <Router>
         <Switch>
 
-            <div className="sb-nav-fixed">
+          <div className="sb-nav-fixed">
             <Header />
+            <Route exact path="/admin/list-category">
+              <ManageCategory />
+            </Route>
 
-            
             <Footer />
-            </div>
+          </div>
 
 
 
