@@ -26,4 +26,4 @@ function Pagination(props) {
 }
 
 export default Pagination;
-//nhi chuyen trang 
+//nhi chuyen trang nhe
