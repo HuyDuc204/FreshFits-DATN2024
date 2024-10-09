@@ -1,6 +1,8 @@
 import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import SideBar from "./SideBar";
+
 function HomePageAdmin(props) {
   return (
     <div>
@@ -9,6 +11,7 @@ function HomePageAdmin(props) {
           <div className="sb-nav-fixed">
             <Header />
             <div id="layoutSidenav">
+            <SideBar />
               <div id="layoutSidenav_content">
                 <main>
                   <Route exact path="/admin/list-category">
