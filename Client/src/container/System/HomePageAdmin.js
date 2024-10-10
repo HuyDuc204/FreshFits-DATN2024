@@ -11,22 +11,24 @@ function HomePageAdmin(props) {
           <div className="sb-nav-fixed">
             <Header />
             <div id="layoutSidenav">
-            <SideBar />
+              <SideBar />
               <div id="layoutSidenav_content">
                 <main>
                   <Route exact path="/admin/list-category">
                     <ManageCategory />
                   </Route>
-
+                  <Route exact path="/admin/list-product">
+                    <ManageProduct />
+                  </Route>
                   <Route exact path="/admin/add-banner">
-                  <AddBanner />
-                </Route>
-                <Route exact path="/admin/edit-banner/:id">
-                  <AddBanner />
-                </Route>
-                <Route exact path="/admin/list-banner">
-                  <ManageBanner />
-                </Route>
+                    <AddBanner />
+                  </Route>
+                  <Route exact path="/admin/edit-banner/:id">
+                    <AddBanner />
+                  </Route>
+                  <Route exact path="/admin/list-banner">
+                    <ManageBanner />
+                  </Route>
                   <Route exact path="/admin/add-blog">
                     <AddBlog />
                   </Route>
