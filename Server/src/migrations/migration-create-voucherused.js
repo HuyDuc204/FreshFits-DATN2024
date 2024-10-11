@@ -4,18 +4,27 @@ const { sequelize } = require("../models");
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('RoomMessages', {
+        await queryInterface.createTable('Voucheruseds', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            userOne: {
+            voucherId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+
+            },
+            userId: {
+
+                allowNull: false,
                 type: Sequelize.INTEGER
             },
-            userTwo: {
-                type: Sequelize.INTEGER
+            status: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+                defaultValue: 0
             },
             createdAt: {
                 allowNull: false,
@@ -28,6 +37,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('RoomMessages');
+        await queryInterface.dropTable('Voucheruseds');
     }
 };
