@@ -4,18 +4,27 @@ const { sequelize } = require("../models");
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('RoomMessages', {
+        await queryInterface.createTable('Vouchers', {
             id: {
                 allowNull: false,
-                autoIncrement: true,
                 primaryKey: true,
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+            },
+            fromDate: {
+                type: Sequelize.STRING
+            },
+            toDate: {
+                type: Sequelize.STRING
+            },
+            typeVoucherId: {
                 type: Sequelize.INTEGER
             },
-            userOne: {
+            amount: {
                 type: Sequelize.INTEGER
             },
-            userTwo: {
-                type: Sequelize.INTEGER
+            codeVoucher: {
+                type: Sequelize.STRING
             },
             createdAt: {
                 allowNull: false,
@@ -28,6 +37,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('RoomMessages');
+        await queryInterface.dropTable('Vouchers');
     }
 };
