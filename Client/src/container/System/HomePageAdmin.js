@@ -7,6 +7,11 @@ import DetailOrder from "./Order/DetailOrder";
 import AddCategory from "./Category/AddCategory";
 import ManageBrand from "./Brand/ManageBrand";
 import AddBrand from "./Brand/AddBrand";
+import AddReceipt from "./Receipt/AddReceipt";
+import ManageSubject from "./Subject/ManageSubject";
+import AddSubject from "./Subject/AddSubject";
+import ManageReceipt from "./Receipt/ManageReceipt";
+import DetailReceipt from "./Receipt/DetailReceipt";
 function HomePageAdmin(props) {
   return (
     <div>
@@ -41,7 +46,7 @@ function HomePageAdmin(props) {
                   <Route exact path="/admin/list-product">
                     <ManageProduct />
                   </Route>
-                   {/* // */}
+                  {/* // */}
                   <Route exact path="/admin/add-banner">
                     <AddBanner />
                   </Route>
@@ -51,7 +56,7 @@ function HomePageAdmin(props) {
                   <Route exact path="/admin/list-banner">
                     <ManageBanner />
                   </Route>
-                   {/* // */}
+                  {/* // */}
                   <Route exact path="/admin/add-blog">
                     <AddBlog />
                   </Route>
@@ -61,14 +66,33 @@ function HomePageAdmin(props) {
                   <Route exact path="/admin/edit-blog/:id">
                     <AddBlog />
                   </Route>
-                   {/* // */}
+                  {/* // */}
+                  <Route exact path="/admin/list-subject">
+                    <ManageSubject />
+                  </Route>
+                  <Route exact path="/admin/add-subject">
+                    <AddSubject />
+                  </Route>
+                  <Route exact path="/admin/edit-subject/:id">
+                    <AddSubject />
+                  </Route>
+                  {/* // */}
                   <Route exact path="/admin/list-order">
                     <ManageOrder />
                   </Route>
                   <Route exact path="/admin/order-detail/:id">
                     <DetailOrder />
                   </Route>
-                   {/* // */}
+                  {/* // */}
+                  <Route exact path="/admin/add-receipt">
+                    <AddReceipt />
+                  </Route>
+                  <Route exact path="/admin/list-receipt">
+                    <ManageReceipt />
+                  </Route>
+                  <Route exact path="/admin/detail-receipt/:id">
+                    <DetailReceipt />
+                  </Route>
                 </main>
 
                 <Footer />
