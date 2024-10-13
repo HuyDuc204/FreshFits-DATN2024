@@ -105,4 +105,4 @@ const AddBrand = (props) => {
     )
 }
 export default AddBrand;
-//nhi them nhan hang nhe
+//Nhi Them brand
