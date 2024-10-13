@@ -149,4 +149,4 @@ const ManageReceipt = () => {
     )
 }
 export default ManageReceipt;
-//danh sach nhap hang
+//Danh sach Receipt Nhi

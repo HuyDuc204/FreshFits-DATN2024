@@ -176,4 +176,4 @@ const ManageBrand = () => {
     )
 }
 export default ManageBrand;
-//nhi danh sach nhan hang
+//Danh sach cac brand

@@ -196,4 +196,4 @@ const AddReceipt = (props) => {
     )
 }
 export default AddReceipt;
-//nhi them nhap hang
+//Nhi add Nhap hang
