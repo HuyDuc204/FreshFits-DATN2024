@@ -259,3 +259,4 @@ module.exports = {
     getFeatureBlog: getFeatureBlog,
     getNewBlog: getNewBlog
 }
+//nhi Blog
