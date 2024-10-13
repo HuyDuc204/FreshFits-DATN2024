@@ -222,4 +222,4 @@ const DetailReceipt = (props) => {
     )
 }
 export default DetailReceipt;
-//them nhap hang chi tiet
+// Nhi Chi tiet nhap hang
