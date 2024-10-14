@@ -328,4 +328,4 @@ function DetailOrder(props) {
 }
 
 export default DetailOrder;
-//Nhi order chi tiet
+// order chi tiet
