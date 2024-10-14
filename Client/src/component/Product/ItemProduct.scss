@@ -1,0 +1,57 @@
+.single-product {
+
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ddd; // Đường viền cho sản phẩm
+  border-radius: 10px; // Bo góc
+  padding: 20px;
+  transition: box-shadow 0.3s, transform 0.3s; // Hiệu ứng chuyển tiếp
+
+  &:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); // Hiệu ứng đổ bóng khi hover
+      transform: translateY(-5px); // Nâng sản phẩm lên khi hover
+  }
+
+  .product-img {
+      overflow: hidden; // Ẩn các phần vượt ra ngoài
+      border-radius: 10px 10px 0 0; // Bo góc cho phần ảnh
+      position: relative;
+
+      img {
+          transition: transform 0.3s; // Hiệu ứng phóng to ảnh
+          &:hover {
+              transform: scale(1.05); // Phóng to ảnh khi hover
+          }
+      }
+  }
+
+  .product-btm {
+      padding: 15px; // Padding cho phần dưới sản phẩm
+      background-color: #fff; // Màu nền trắng cho phần mô tả sản phẩm
+      border-radius: 0 0 10px 10px; // Bo góc cho phần mô tả
+
+      h4 {
+          font-size: 1.2rem; // Kích thước chữ cho tên sản phẩm
+          color: #333; // Màu chữ
+          margin-bottom: 10px; // Khoảng cách dưới
+      }
+
+      .mt-3 {
+          display: flex; // Sử dụng flexbox cho khoảng giá
+          align-items: center; // Căn giữa
+          font-size: 1rem; // Kích thước chữ cho giá
+          color: #ff6f61; // Màu chữ cho giá khuyến mãi
+
+          .mr-4 {
+              margin-right: 1rem; // Khoảng cách bên phải
+              font-weight: bold; // Làm nổi bật giá khuyến mãi
+          }
+
+          del {
+              color: #999; // Màu chữ cho giá gốc
+              text-decoration: line-through; // Gạch chéo
+              margin-left: 10px; // Khoảng cách bên trái
+          }
+      }
+  }
+}

@@ -1,0 +1,237 @@
+.box-size {
+  display: flex;
+  align-items: center;
+
+  .product-size {
+    padding: 6px 35px;
+    border: 1px solid #00000017;
+    color: #333;
+    font-size: 16px;
+    margin-left: 8px;
+    cursor: pointer;
+
+    &:hover {
+      color: #71cd14;
+      border-color: #71cd14;
+    }
+    &.active {
+      color: #71cd14 !important;
+      border-color: #71cd14 !important;
+    }
+  }
+}
+.box {
+  width: 100%;
+  padding: 2em;
+  text-align: center;
+}
+
+.quantity {
+  position: relative;
+  display: inline-block;
+  color: #7f7f7f;
+
+  input[type="number"] {
+    transition: border 0.3s ease-in-out, color 0.3s ease-in-out;
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 700;
+    box-shadow: none;
+    outline: none;
+    width: 42px;
+    height: 34px;
+    text-align: center;
+    float: right;
+    border: 1px solid #dcdcdc;
+    background-color: #fff;
+    color: #342f2f;
+
+    &:focus {
+      border-color: #57b8f6 !important;
+    }
+
+    &:hover {
+      border-color: #a5a5a5;
+    }
+  }
+
+  &-button {
+    width: 39px;
+    height: 34px;
+    display: block;
+    float: right;
+    position: relative;
+    cursor: pointer;
+
+    &::before,
+    &::after {
+      position: absolute;
+      top: calc(50% - 1px);
+      left: calc(50% - 7px);
+      content: "";
+      width: 14px;
+      height: 2px;
+      background-color: currentColor;
+      display: block;
+    }
+  }
+
+  &-remove {
+    &::after {
+      display: none;
+    }
+  }
+
+  &-add {
+    &::after {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+// .s_product_inner {
+//   display: flex;
+//   flex-wrap: wrap;
+  
+
+//   .s_product_img {
+//     .carousel-indicators {
+//       li {
+//         width: 60px;
+//         height: auto;
+//         img {
+//           width: 100%;
+//           height: 60px;
+//         }
+//       }
+//     }
+
+//     .carousel-item {
+//       cursor: pointer;
+
+//       img {
+//         width: 100%;
+//         height: auto;
+//       }
+//     }
+//   }
+
+//   .s_product_text {
+//     h3 {
+//       font-size: 24px;
+//       font-weight: bold;
+//       margin-bottom: 10px;
+//     }
+
+//     h2 {
+//       font-size: 30px;
+//       color: #26e8d1;
+//       margin-bottom: 20px;
+//     }
+
+//     ul.list {
+//       li {
+//         margin-bottom: 10px;
+//         a {
+//           font-size: 14px;
+//           color: #797979;
+
+//           span {
+//             font-weight: bold;
+//           }
+//         }
+//       }
+
+//       .box-size {
+//         display: flex;
+//         flex-wrap: wrap;
+
+//         .product-size {
+//           padding: 5px 10px;
+//           border: 1px solid #ccc;
+//           margin-right: 5px;
+//           cursor: pointer;
+//           &.active {
+//             background-color: #26e8d1;
+//             color: #fff;
+//           }
+//         }
+//       }
+//     }
+
+//     p {
+//       font-size: 14px;
+//       color: #333;
+//       margin-bottom: 20px;
+//     }
+
+//     .product_count {
+//       label {
+//         font-size: 14px;
+//         color: #797979;
+//         margin-right: 10px;
+//       }
+
+//       input {
+//         width: 60px;
+//         text-align: center;
+//         padding: 5px;
+//         border: 1px solid #ccc;
+//         border-radius: 5px;
+//       }
+//     }
+
+//     .form-group {
+//       margin-left: 16px;
+
+//       select.sorting {
+//         padding: 5px 10px;
+//         border: 1px solid #eee;
+//         outline: none;
+//       }
+//     }
+
+//     .card_area {
+//       margin-top: 20px;
+//       display: flex;
+//       align-items: center;
+
+//       .main_btn {
+//         background-color: #26e8d1;
+//         color: #fff;
+//         padding: 10px 20px;
+//         border: none;
+//         border-radius: 5px;
+//         cursor: pointer;
+//         transition: background-color 0.3s ease;
+//         &:hover {
+//           background-color: #e05a50;
+//         }
+//       }
+
+//       .icon_btn {
+//         margin-left: 10px;
+//         i {
+//           font-size: 20px;
+//           color: #26e8d1;
+//         }
+//       }
+//     }
+//   }
+// }
