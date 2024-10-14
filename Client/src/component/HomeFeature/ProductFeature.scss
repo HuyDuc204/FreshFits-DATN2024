@@ -1,0 +1,35 @@
+.box-productFeature {
+  .slick-prev {
+    z-index: 50 !important;
+    left: 7px !important;
+    height: 48px !important;
+    width: 44px !important;
+
+    top: 206px;
+  }
+  .slick-prev::before,
+  .slick-next::before {
+    font-size: 50px;
+    color: #333 !important;
+  }
+
+  .slick-next {
+    right: 57px !important;
+    z-index: 50 !important;
+    height: 48px !important;
+    width: 4px !important;
+    top: 206px;
+  }
+  .slick-disable {
+    display: none !important;
+  }
+}
+.gap {
+  .box-productFeature {
+    .slick-slider {
+      .slick-slide {
+     padding: 10px;
+      }
+    }
+  }
+}
