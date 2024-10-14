@@ -1,0 +1,65 @@
+.home_banner_area {
+  margin-bottom: 40px;
+
+  .box-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-size: cover; // Đảm bảo ảnh nền bao phủ hoàn toàn
+    background-repeat: no-repeat;
+
+    .banner_inner {
+      width: 100%;
+      text-align: center; // Căn giữa nội dung banner
+      padding: 20px; // Khoảng cách nội dung với viền banner
+      background: rgba(0, 0, 0, 0.5); // Nền mờ để làm nổi bật chữ
+      border-radius: 15px; // Bo góc cho phần nội dung
+
+      .container {
+        max-width: 1200px; // Giới hạn chiều rộng cho container
+        margin: auto; // Căn giữa container
+      }
+
+      .banner_content {
+        .sub {
+          font-size: 1.2rem; // Kích thước chữ cho subtitle
+          color: #ffffff; // Màu chữ
+          margin-bottom: 10px;
+          letter-spacing: 1px; // Khoảng cách giữa các chữ
+          text-transform: uppercase; // Chữ in hoa
+        }
+
+        h3 {
+          font-size: 2.5rem; // Kích thước chữ cho tiêu đề
+          color: #ffffff; // Màu chữ
+          margin: 20px 0; // Khoảng cách trên và dưới tiêu đề
+
+          span {
+            color: #ffcc00; // Màu khác cho từ khóa
+          }
+        }
+
+        h4 {
+          font-size: 1.5rem; // Kích thước chữ cho tiêu đề phụ
+          color: #ffcc00; // Màu chữ khác cho tiêu đề phụ
+          margin-bottom: 20px; // Khoảng cách dưới tiêu đề phụ
+        }
+
+        .main_btn {
+          display: inline-block; // Biến nó thành một nút
+          padding: 12px 30px; // Padding cho nút
+          background-color: #ffcc00; // Màu nền cho nút
+          color: #333; // Màu chữ cho nút
+          font-weight: bold; // Chữ đậm cho nút
+          border-radius: 5px; // Bo góc cho nút
+          transition: background-color 0.3s ease; // Hiệu ứng chuyển màu nền
+
+          &:hover {
+            background-color: #ff9900; // Màu nền khi hover
+          }
+        }
+      }
+    }
+  }
+}
