@@ -15,6 +15,9 @@ import DetailReceipt from "./Receipt/DetailReceipt";
 import ManageTypeShip from "./TypeShip/ManageTypeShip";
 import AddTypeShip from "./TypeShip/AddTypeShip";
 import Turnover from "./Statistic/Turnover";
+import Home from "./Home";
+import ManageUser from "./User/ManageUser";
+import Adduser from "./User/Adduser";
 
 function HomePageAdmin(props) {
   return (
@@ -27,6 +30,18 @@ function HomePageAdmin(props) {
               <SideBar />
               <div id="layoutSidenav_content">
                 <main>
+                <Route exact path="/admin/">
+                  <Home />
+                </Route>
+                <Route exact path="/admin/list-user">
+                  <ManageUser />
+                </Route>
+                <Route exact path="/admin/add-user">
+                  <Adduser />
+                </Route>
+                <Route exact path="/admin/edit-user/:id">
+                  <Adduser />
+                </Route>
                   <Route exact path="/admin/list-category">
                     <ManageCategory />
                   </Route>
