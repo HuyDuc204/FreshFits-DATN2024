@@ -12,6 +12,10 @@ import ManageSubject from "./Subject/ManageSubject";
 import AddSubject from "./Subject/AddSubject";
 import ManageReceipt from "./Receipt/ManageReceipt";
 import DetailReceipt from "./Receipt/DetailReceipt";
+import ManageTypeShip from "./TypeShip/ManageTypeShip";
+import AddTypeShip from "./TypeShip/AddTypeShip";
+import Turnover from "./Statistic/Turnover";
+
 function HomePageAdmin(props) {
   return (
     <div>
@@ -93,6 +97,29 @@ function HomePageAdmin(props) {
                   <Route exact path="/admin/detail-receipt/:id">
                     <DetailReceipt />
                   </Route>
+                  {/* // */}
+                  <Route exact path="/admin/list-typeship">
+                    <ManageTypeShip />
+                  </Route>
+                  <Route exact path="/admin/add-typeship">
+                    <AddTypeShip />
+                  </Route>
+                  <Route exact path="/admin/edit-typeship/:id">
+                    <AddTypeShip />
+                  </Route>
+                  {/* // */}
+                  <Route exact path="/admin/turnover">
+                    <Turnover />
+                  </Route>
+                  <Route exact path="/admin/profit">
+                    <Profit />
+                  </Route>
+                  <Route exact path="/admin/stock-product">
+                    <StockProduct />
+                  </Route>
+                  {/* // */}
+                  {/* // */}
+                  {/* // */}
                 </main>
 
                 <Footer />
