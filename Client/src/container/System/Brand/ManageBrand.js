@@ -176,4 +176,3 @@ const ManageBrand = () => {
     )
 }
 export default ManageBrand;
-//managebrand
