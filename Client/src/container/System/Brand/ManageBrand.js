@@ -176,4 +176,3 @@ const ManageBrand = () => {
     )
 }
 export default ManageBrand;
-//Danh sach cac brand
