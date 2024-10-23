@@ -105,4 +105,3 @@ const AddBrand = (props) => {
     )
 }
 export default AddBrand;
-//addbrand
