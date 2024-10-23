@@ -12,10 +12,6 @@ import ManageSubject from "./Subject/ManageSubject";
 import AddSubject from "./Subject/AddSubject";
 import ManageReceipt from "./Receipt/ManageReceipt";
 import DetailReceipt from "./Receipt/DetailReceipt";
-import AddTypeVoucher from "./Voucher/AddTypeVoucher";
-import ManageTypeVoucher from "./Voucher/ManageTypeVoucher";
-import AddVoucher from "./Voucher/AddVoucher";
-import ManageVoucher from "./Voucher/ManageVoucher";
 function HomePageAdmin(props) {
   return (
     <div>
@@ -96,25 +92,6 @@ function HomePageAdmin(props) {
                   </Route>
                   <Route exact path="/admin/detail-receipt/:id">
                     <DetailReceipt />
-                  </Route>
-                  {/* // */}
-                  <Route exact path="/admin/add-typevoucher">
-                    <AddTypeVoucher />
-                  </Route>
-                  <Route exact path="/admin/list-typevoucher">
-                    <ManageTypeVoucher />
-                  </Route>
-                  <Route exact path="/admin/edit-typevoucher/:id">
-                    <AddTypeVoucher />
-                  </Route>
-                  <Route exact path="/admin/add-voucher">
-                    <AddVoucher />
-                  </Route>
-                  <Route exact path="/admin/edit-voucher/:id">
-                    <AddVoucher />
-                  </Route>
-                  <Route exact path="/admin/list-voucher">
-                    <ManageVoucher />
                   </Route>
                 </main>
 
