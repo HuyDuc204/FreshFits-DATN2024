@@ -46,3 +46,4 @@ export const PREFIX_CURRENCY = {
 export const EXCHANGE_RATES = {
     USD: 24300,
 };
+//
