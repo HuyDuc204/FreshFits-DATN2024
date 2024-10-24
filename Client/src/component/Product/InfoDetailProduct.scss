@@ -93,145 +93,66 @@
   }
 }
 
+////////////////////////////
+/// 
+/// 
+.custom-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  animation: slideIn 0.3s ease;
+  width: 300px; // Đặt chiều rộng tối đa để đảm bảo nội dung không bị nhảy ra
 
+  p {
+    margin: 0 0 12px; // Đặt margin cho văn bản
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
 
+  .toast-buttons {
+    display: flex;
+    justify-content: space-between;
 
+    .btn-go-cart,
+    .btn-stay {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
 
+      &:hover {
+        background-color: #0056b3; // Màu nền khi hover
+      }
+    }
 
+    .btn-stay {
+      background-color: #6c757d; // Màu nền nút "Ở lại trang"
 
+      &:hover {
+        background-color: #5a6268; // Màu nền khi hover
+      }
+    }
+  }
+}
 
-
-
-
-
-
-// .s_product_inner {
-//   display: flex;
-//   flex-wrap: wrap;
-  
-
-//   .s_product_img {
-//     .carousel-indicators {
-//       li {
-//         width: 60px;
-//         height: auto;
-//         img {
-//           width: 100%;
-//           height: 60px;
-//         }
-//       }
-//     }
-
-//     .carousel-item {
-//       cursor: pointer;
-
-//       img {
-//         width: 100%;
-//         height: auto;
-//       }
-//     }
-//   }
-
-//   .s_product_text {
-//     h3 {
-//       font-size: 24px;
-//       font-weight: bold;
-//       margin-bottom: 10px;
-//     }
-
-//     h2 {
-//       font-size: 30px;
-//       color: #26e8d1;
-//       margin-bottom: 20px;
-//     }
-
-//     ul.list {
-//       li {
-//         margin-bottom: 10px;
-//         a {
-//           font-size: 14px;
-//           color: #797979;
-
-//           span {
-//             font-weight: bold;
-//           }
-//         }
-//       }
-
-//       .box-size {
-//         display: flex;
-//         flex-wrap: wrap;
-
-//         .product-size {
-//           padding: 5px 10px;
-//           border: 1px solid #ccc;
-//           margin-right: 5px;
-//           cursor: pointer;
-//           &.active {
-//             background-color: #26e8d1;
-//             color: #fff;
-//           }
-//         }
-//       }
-//     }
-
-//     p {
-//       font-size: 14px;
-//       color: #333;
-//       margin-bottom: 20px;
-//     }
-
-//     .product_count {
-//       label {
-//         font-size: 14px;
-//         color: #797979;
-//         margin-right: 10px;
-//       }
-
-//       input {
-//         width: 60px;
-//         text-align: center;
-//         padding: 5px;
-//         border: 1px solid #ccc;
-//         border-radius: 5px;
-//       }
-//     }
-
-//     .form-group {
-//       margin-left: 16px;
-
-//       select.sorting {
-//         padding: 5px 10px;
-//         border: 1px solid #eee;
-//         outline: none;
-//       }
-//     }
-
-//     .card_area {
-//       margin-top: 20px;
-//       display: flex;
-//       align-items: center;
-
-//       .main_btn {
-//         background-color: #26e8d1;
-//         color: #fff;
-//         padding: 10px 20px;
-//         border: none;
-//         border-radius: 5px;
-//         cursor: pointer;
-//         transition: background-color 0.3s ease;
-//         &:hover {
-//           background-color: #e05a50;
-//         }
-//       }
-
-//       .icon_btn {
-//         margin-left: 10px;
-//         i {
-//           font-size: 20px;
-//           color: #26e8d1;
-//         }
-//       }
-//     }
-//   }
-// }
+// Thêm hiệu ứng cho thông báo khi xuất hiện
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
