@@ -55,15 +55,15 @@ function ReviewProduct(props) {
     let handleOnChangeImage = async (event) => {
         let data = event.target.files;
         let file = data[0];
-        if(file.size > 31312281){
+        if (file.size > 31312281) {
             toast.error("Dung lượng file bé hơn 30mb")
         }
-        else{
+        else {
             let base64 = await CommonUtils.getBase64(file);
             let objectUrl = URL.createObjectURL(file)
             setInputValues({ ...inputValues, ["image"]: base64, ["imageReview"]: objectUrl })
         }
-       
+
     }
     const handleOnChange = event => {
         const { name, value } = event.target;
@@ -83,7 +83,14 @@ function ReviewProduct(props) {
             })
             if (response && response.errCode === 0) {
                 toast.success("Đăng đánh giá thành công !")
-
+                setInputValues({
+                    ...inputValues,
+                    activeStar: '',
+                    image: '',
+                    content: '',
+                    imageReview: '',
+                    isOpenModal: false
+                });
                 await loadAllReview()
 
             } else {

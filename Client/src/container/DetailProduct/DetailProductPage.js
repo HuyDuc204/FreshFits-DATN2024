@@ -144,7 +144,7 @@ function DetailProductPage(props) {
               role="tabpanel"
               aria-labelledby="review-tab"
             >
-              {/* <ReviewProduct /> */}
+              <ReviewProduct />
             </div>
           </div>
         </div>

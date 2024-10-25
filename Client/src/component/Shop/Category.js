@@ -55,4 +55,3 @@ function Category(props) {
 }
 
 export default Category;
-//nhi chon danh muc san pham

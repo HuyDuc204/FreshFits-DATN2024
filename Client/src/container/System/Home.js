@@ -184,7 +184,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        {/* <div className="col-xl-3 col-md-6">
+        <div className="col-xl-3 col-md-6">
           <div className="card bg-warning text-white mb-4">
             <div className="card-body">ĐÁNH GIÁ ({CountCard.countReview})</div>
             <div className="card-footer d-flex align-items-center justify-content-between">
@@ -196,7 +196,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
         <div className="col-xl-3 col-md-6">
           <div className="card bg-success text-white mb-4">
             <div className="card-body">SẢN PHẨM ({CountCard.countProduct})</div>

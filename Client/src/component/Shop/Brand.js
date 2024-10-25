@@ -51,4 +51,3 @@ function Brand(props) {
 }
 
 export default Brand;
-//  nhi chon loc thuong hieu
