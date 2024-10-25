@@ -1,0 +1,91 @@
+.voucher-container {
+    background-color: #f8f9fa; // Nền nhẹ
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    .voucher-banner {
+        position: relative;
+        margin-bottom: 20px;
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            &:not(:last-child) {
+                margin-right: 10px; // Khoảng cách giữa các banner
+            }
+        }
+    }
+
+    .voucher-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px; // Khoảng cách giữa các voucher
+
+        // Nếu muốn căn giữa các voucher
+        justify-content: center;
+
+        // Kiểu hiển thị voucher
+        .voucher-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            }
+
+            // Bạn có thể thêm kiểu dáng cho hình ảnh
+            img {
+                width: 100%;
+                height: 200px; // Hoặc kích thước phù hợp với thiết kế của bạn
+                object-fit: cover;
+            }
+
+            .voucher-info {
+                padding: 15px;
+                text-align: center;
+
+                h5 {
+                    font-size: 1.25rem;
+                    margin-bottom: 10px;
+                }
+
+                p {
+                    font-size: 1rem;
+                    color: #555; // Màu chữ nhạt hơn
+                }
+            }
+        }
+    }
+
+    .box-pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        .pagination {
+            .page-item {
+                margin: 0 5px;
+
+                &.active {
+                    background-color: #007bff; // Màu nền cho trang đang hoạt động
+                    color: white;
+                }
+
+                .page-link {
+                    padding: 10px 15px;
+                    border: 1px solid #007bff; // Viền cho trang
+                    border-radius: 5px;
+
+                    &:hover {
+                        background-color: #0056b3; // Màu nền khi hover
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
