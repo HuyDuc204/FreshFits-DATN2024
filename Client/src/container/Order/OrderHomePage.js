@@ -177,27 +177,7 @@ function OrderHomePage(props) {
             : price + +priceShip;
         total = parseFloat((total / EXCHANGE_RATES.USD).toFixed(2));
         if (activeTypeOnlPayment === 1) {
-          let res = await paymentOrderService({
-            total: total,
-            result: result,
-          });
-          if (res && res.errCode == 0) {
-            localStorage.setItem(
-              "orderData",
-              JSON.stringify({
-                orderdate: Date.now(),
-                addressUserId: addressUserId,
-                isPaymentOnlien: activeTypePayment === 1 ? 1 : 0,
-                typeShipId: dataTypeShip.id,
-                voucherId: dataVoucher.voucherId,
-                note: note,
-                userId: userId,
-                arrDataShopCart: result,
-                total: total,
-              })
-            );
-            window.location.href = res.link;
-          }
+          toast.error("Vui lòng chọn phương thức thanh toán")
         } else {
           history.push({
             pathname: "/payment/vnpay",

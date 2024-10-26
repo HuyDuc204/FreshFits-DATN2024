@@ -52,10 +52,7 @@ function VnpayPaymentPage(props) {
   return (
     <>
       <div className="wrap-order">
-        <div className="wrap-heading-order">
-          <NavLink to="/" className="navbar-brand logo_h">
-            <img src="/resources/img/logo.png" alt="" />
-          </NavLink>  
+        <div className="wrap-heading-order"> 
           <span>Thanh Toán VNPAY</span>
         </div>
 
