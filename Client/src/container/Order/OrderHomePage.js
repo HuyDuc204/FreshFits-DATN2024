@@ -39,7 +39,7 @@ function OrderHomePage(props) {
   const [isOpenModalAddressUser, setisOpenModalAddressUser] = useState(false);
   const [isOpenModal, setisOpenModal] = useState(false);
   const [typeShip, settypeShip] = useState([]);
-  const [activeTypePayment, setactiveTypePayment] = useState(0);
+  const [activeTypePayment, setactiveTypePayment] = useState(1);
   const [activeTypeOnlPayment, setactiveTypeOnlPayment] = useState(1);
   const [note, setnote] = useState("");
   useEffect(() => {
@@ -147,6 +147,7 @@ function OrderHomePage(props) {
         object.realPrice = item.productDetail.discountPrice;
         result.push(object);
       });
+  
 
       if (activeTypePayment == 0) {
         let res = await createNewOrderService({
@@ -159,6 +160,7 @@ function OrderHomePage(props) {
           userId: userId,
           arrDataShopCart: result,
         });
+        
         if (res && res.errCode === 0) {
           toast.success("Đặt hàng thành công");
           dispatch(getItemCartStart(userId));
@@ -457,7 +459,7 @@ function OrderHomePage(props) {
           <div className="content-top">
             <div style={{ display: "flex", gap: "10px" }}>
               <span>Phương Thức Thanh Toán</span>
-              {/* <div
+              <div
                 onClick={() => setactiveTypePayment(1)}
                 className={
                   activeTypePayment === 1
@@ -466,7 +468,7 @@ function OrderHomePage(props) {
                 }
               >
                 Thanh toán Online
-              </div> */}
+              </div>
 
               <div
                 onClick={() => setactiveTypePayment(0)}
@@ -479,18 +481,9 @@ function OrderHomePage(props) {
                 Thanh toán khi nhận hàng
               </div>
             </div>
-            {/* {activeTypePayment != 0 && (
+            {activeTypePayment != 0 && (
               <div className="box-payment">
-                <div
-                  onClick={() => setactiveTypeOnlPayment(1)}
-                  className={
-                    activeTypeOnlPayment === 1
-                      ? "box-type-payment activeOnl"
-                      : "box-type-payment"
-                  }
-                >
-                  Thanh toán PAYPAL
-                </div>
+           
                 <div
                   onClick={() => setactiveTypeOnlPayment(2)}
                   className={
@@ -502,7 +495,7 @@ function OrderHomePage(props) {
                   Thanh toán VNPAY
                 </div>
               </div>
-            )} */}
+            )}
           </div>
 
           <div className="content-bottom">
