@@ -59,6 +59,8 @@ function ChatWindow(props) {
 
             }
             socketRef.current.emit('sendDataClient', msg)
+
+
             setMessage('')
         }
     }
