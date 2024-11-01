@@ -1,189 +1,348 @@
-import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    Redirect,
-    useParams
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useParams,
 } from "react-router-dom";
-import './OrderUser.scss';
-import { getAllOrdersByUser, updateStatusOrderService } from '../../services/userService'
-import { concat } from 'lodash';
-import CommonUtils from '../../utils/CommonUtils';
+import "./OrderUser.scss";
+import {
+  getAllOrdersByUser,
+  updateStatusOrderService,
+} from "../../services/userService";
+import { concat } from "lodash";
+import CommonUtils from "../../utils/CommonUtils";
+
 function OrderUser(props) {
-    const { id } = useParams();
-    const [DataOrder, setDataOrder] = useState([]);
-    let price = 0;
-    const [priceShip, setpriceShip] = useState(0)
-    useEffect(() => {
-        loadDataOrder()
-    }, [])
-    let loadDataOrder = () => {
-        if (id) {
-            let fetchOrder = async () => {
-                let order = await getAllOrdersByUser(id)
-                if (order && order.errCode == 0) {
-                    let orderArray = []
-                    for (let i = 0; i < order.data.length; i++) {
+  const { id } = useParams();
+  const [DataOrder, setDataOrder] = useState([]);
 
-                        orderArray = concat(orderArray, order.data[i].order)
-                    }
+  const [confirmedOrders, setConfirmedOrders] = useState(new Set()); // Thêm state để lưu trữ đơn hàng đã xác nhận
+  let price = 0;
+  const [priceShip, setpriceShip] = useState(0);
 
-                    setDataOrder(orderArray)
+  useEffect(() => {
+    loadDataOrder();
+    loadConfirmedOrders(); // Tải đơn hàng đã xác nhận từ local storage
+  }, []);
 
-                }
-            }
-            fetchOrder()
-
-
-        }
+  const loadConfirmedOrders = () => {
+    const storedOrders = localStorage.getItem("confirmedOrders");
+    if (storedOrders) {
+      setConfirmedOrders(new Set(JSON.parse(storedOrders)));
     }
-    let handleCancelOrder = async (data) => {
-        let res = await updateStatusOrderService({
-            id: data.id,
-            statusId: 'S7',
-            dataOrder: data
-        })
-        if (res && res.errCode == 0) {
-            toast.success("Hủy đơn hàng thành công")
-            loadDataOrder()
+  };
+
+  let loadDataOrder = () => {
+    if (id) {
+      let fetchOrder = async () => {
+        let order = await getAllOrdersByUser(id);
+        if (order && order.errCode === 0) {
+          let orderArray = [];
+          for (let i = 0; i < order.data.length; i++) {
+            orderArray = concat(orderArray, order.data[i].order);
+          }
+          // Sắp xếp các đơn hàng theo thời gian tạo (giả sử có thuộc tính createdAt)
+          orderArray.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          setDataOrder(orderArray);
         }
+      };
+      fetchOrder();
     }
-    let handleReceivedOrder = async (orderId) => {
-        let res = await updateStatusOrderService({
-            id: orderId,
-            statusId: 'S6'
-        })
-        if (res && res.errCode == 0) {
-            toast.success("Đã nhận đơn hàng")
-            loadDataOrder()
-        }
-    }
-    let totalPriceDiscount = (price, discount) => {
+  };
 
-        if (discount.typeVoucherOfVoucherData.typeVoucher === "percent") {
+  const handleCancelOrder = (data) => {
+    const reasons = [
+      "Tôi muốn cập nhật địa chỉ/sdt nhận hàng",
+      "Người bán không trả lời thắc mắc / yêu cầu của tôi",
+      "Thay đổi đơn hàng(màu sắc, kích thước, thêm mã giảm,...)",
+      "Tôi không không có nhu cầu mua nữa",
+      "Khác lý do",
+    ];
 
-            if (((price * discount.typeVoucherOfVoucherData.value) / 100) > discount.typeVoucherOfVoucherData.maxValue) {
-
-                return price - discount.typeVoucherOfVoucherData.maxValue
-            } else {
-                return price - ((price * discount.typeVoucherOfVoucherData.value) / 100)
-            }
-        } else {
-            return price - discount.typeVoucherOfVoucherData.maxValue
-        }
-
-    }
-    return (
-
-        <div className="container container-list-order rounded mt-5 mb-5">
-            <div className="row">
-                <div className="col-md-12">
-                    <div className="box-nav-order">
-                        <a className='nav-item-order active'>
-                            <span>Tất cả</span>
-                        </a>
-
-                    </div>
-                    {/* <div className='box-search-order'>
-                        <i className="fas fa-search"></i>
-                        <input autoComplete='off' placeholder='Tìm kiếm theo Tên Shop, ID đơn hàng hoặc Tên Sản phẩm' type={"text"} />
-                    </div> */}
-                    {DataOrder && DataOrder.length > 0 &&
-                        DataOrder.map((item, index) => {
-                            return (
-                                <div key={index}>
-                                    <div className='box-list-order'>
-                                        <div className='content-top'>
-                                            <div className='content-left'>
-                                                <div className='label-favorite'>
-                                                    Yêu thích
-                                                </div>
-                                                <span className='label-name-shop'>Eiser shop</span>
-                                                <div className='view-shop'>
-                                                    <i className="fas fa-store"></i>
-
-                                                    <a style={{ color: 'black' }} href='/shop'>Xem shop</a>
-                                                </div>
-                                            </div>
-                                            <div className='content-right'>
-                                                {/* {item.statusOrderData && item.statusOrderData.value} {item.isPaymentOnlien == 1 && ' | Đã thanh toán'} */}
-                                               Đã giao hàng
-                                            </div>
-                                        </div>
-                                        {item.orderDetail && item.orderDetail.length > 0 &&
-                                            item.orderDetail.map((item, index) => {
-
-                                                price += item.quantity * item.productDetail.discountPrice
-                                                return (
-                                                    <div className='content-center'>
-                                                        <div className='box-item-order'>
-                                                            <img src={item.productImage[0].image}></img>
-                                                            <div className='box-des'>
-                                                                <span className='name'>{item.product.name}</span>
-                                                                <span className='type'>Phân loại hàng: {item.productDetail.nameDetail} | {item.productDetailSize.sizeData.value}</span>
-                                                                <span>x{item.quantity}</span>
-                                                            </div>
-                                                            <div className='box-price'>{CommonUtils.formatter.format(item.productDetail.discountPrice)}</div>
-                                                        </div>
-
-
-                                                    </div>
-                                                )
-                                            })
-                                        }
-
-
-                                    </div>
-                                    <div className='content-bottom'>
-                                        <div className='up'>
-                                            <svg width="16" height="17" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.94 1.664s.492 5.81-1.35 9.548c0 0-.786 1.42-1.948 2.322 0 0-1.644 1.256-4.642 2.561V0s2.892 1.813 7.94 1.664zm-15.88 0C5.107 1.813 8 0 8 0v16.095c-2.998-1.305-4.642-2.56-4.642-2.56-1.162-.903-1.947-2.323-1.947-2.323C-.432 7.474.059 1.664.059 1.664z" fill="url(#paint0_linear)"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M8.073 6.905s-1.09-.414-.735-1.293c0 0 .255-.633 1.06-.348l4.84 2.55c.374-2.013.286-4.009.286-4.009-3.514.093-5.527-1.21-5.527-1.21s-2.01 1.306-5.521 1.213c0 0-.06 1.352.127 2.955l5.023 2.59s1.09.42.693 1.213c0 0-.285.572-1.09.28L2.928 8.593c.126.502.285.99.488 1.43 0 0 .456.922 1.233 1.56 0 0 1.264 1.126 3.348 1.941 2.087-.813 3.352-1.963 3.352-1.963.785-.66 1.235-1.556 1.235-1.556a6.99 6.99 0 00.252-.632L8.073 6.905z" fill="#FEFEFE"></path><defs><linearGradient id="paint0_linear" x1="8" y1="0" x2="8" y2="16.095" gradientUnits="userSpaceOnUse"><stop stop-color="#F53D2D"></stop><stop offset="1" stop-color="#F63"></stop></linearGradient></defs></svg>
-                                            <span>Tổng số tiền: </span>
-                                            <span className='name'>{item && item.voucherData && item.voucherData.id ? CommonUtils.formatter.format(totalPriceDiscount(price, item.voucherData) + item.typeShipData.price) : CommonUtils.formatter.format(price + (+item.typeShipData.price))}</span>
-                                            <div style={{ display: 'none' }}>
-                                                {price = 0}
-                                            </div>
-                                        </div>
-                                        <div className='down'>
-                                            {/* {((item.statusId == 'S3') || (item.statusId == 'S4')) && item.isPaymentOnlien == 0 &&
-
-                                                <div className='btn-buy' onClick={() => handleCancelOrder(item)}>
-                                                    Hủy đơn
-                                                </div>
-
-                                            } */}
-                                            {
-                                                item.statusId == 'S5' &&
-
-
-                                                <div className='btn-buy' onClick={() => handleReceivedOrder(item.id)} >
-                                                    Đã nhận hàng
-                                                </div>
-
-
-                                            }
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            )
-
-                        })
-                    }
-
-
-                </div>
-            </div>
-
-        </div >
-
+    toast.info(
+      <div>
+        <p>Vui lòng chọn lý do hủy đơn:</p>
+        {reasons.map((reason, index) => (
+          <button
+            key={index}
+            onClick={() => confirmCancelOrder(data, reason)}
+            style={{
+              display: "block",
+              margin: "5px 0",
+              backgroundColor: "#f44336",
+              color: "#fff",
+              border: "none",
+              padding: "8px",
+              cursor: "pointer",
+              borderRadius: "4px",
+            }}
+          >
+            {reason}
+          </button>
+        ))}
+      </div>,
+      { position: "top-center", autoClose: false }
     );
+  };
+
+  const confirmCancelOrder = async (data, reason) => {
+    let res = await updateStatusOrderService({
+      id: data.id,
+      statusId: "S7",
+      dataOrder: data,
+    });
+    if (res && res.errCode === 0) {
+      toast.success(`Hủy đơn hàng thành công. Lý do: ${reason}`);
+      loadDataOrder();
+    }
+  };
+
+  let handleReceivedOrder = async (orderId) => {
+    let res = await updateStatusOrderService({
+      id: orderId,
+      statusId: "S6",
+    });
+    if (res && res.errCode == 0) {
+      toast.success("Đã nhận đơn hàng");
+      loadDataOrder();
+    }
+  };
+
+  let handleReceivedOrder3 = async (orderId) => {
+    let res = await updateStatusOrderService({
+      id: orderId,
+      statusId: "S8",
+    });
+    if (res && res.errCode == 0) {
+      toast.success("Xác nhận đã nhận đơn hàng thành công");
+      loadDataOrder();
+    }
+  };
+
+  let handleCancelOrder2 = async (data) => {
+    toast.success(
+      <div>
+        Bạn chưa nhận được hàng! Vui lòng kiểm tra lại.
+        <div>
+          <button
+            onClick={async () => {
+              // Xử lý xác nhận
+              let res = await updateStatusOrderService({
+                id: data.id,
+                statusId: "S9",
+                dataOrder: data,
+              });
+              if (res && res.errCode === 0) {
+                toast.success("Đã xác nhận bạn chưa nhận được hàng.");
+                loadDataOrder();
+              }
+            }}
+            style={{
+              backgroundColor: "#4caf50",
+              color: "#fff",
+              border: "none",
+              padding: "8px 16px",
+              borderRadius: "4px",
+              marginRight: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Xác nhận
+          </button>
+          <button
+            onClick={() => {
+              // Xử lý hủy
+              toast.info("Hủy hành động xác nhận.");
+            }}
+            style={{
+              backgroundColor: "#f44336",
+              color: "#fff",
+              border: "none",
+              padding: "8px 16px",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Hủy
+          </button>
+        </div>
+      </div>,
+      { position: "top-center", autoClose: false }
+    );
+  };
+
+  let totalPriceDiscount = (price, discount) => {
+    if (discount.typeVoucherOfVoucherData.typeVoucher === "percent") {
+      if (
+        (price * discount.typeVoucherOfVoucherData.value) / 100 >
+        discount.typeVoucherOfVoucherData.maxValue
+      ) {
+        return price - discount.typeVoucherOfVoucherData.maxValue;
+      } else {
+        return price - (price * discount.typeVoucherOfVoucherData.value) / 100;
+      }
+    } else {
+      return price - discount.typeVoucherOfVoucherData.maxValue;
+    }
+  };
+
+  return (
+    <div className="container container-list-order rounded mt-5 mb-5">
+      <div className="row">
+        <div className="col-md-12">
+          <div className="box-nav-order">
+            <a className="nav-item-order active">
+              <span>Tất cả</span>
+            </a>
+          </div>
+          <div className="box-search-order p-2">
+            <i className="fas fa-search"></i>
+            <input
+              autoComplete="off"
+              placeholder="Tìm kiếm theo Tên Shop, ID đơn hàng hoặc Tên Sản phẩm"
+              type={"text"}
+            />
+          </div>
+          {DataOrder &&
+            DataOrder.length > 0 &&
+            DataOrder.map((item, index) => {
+              return (
+                <div key={index}>
+                  <div className="box-list-order">
+                    <div className="content-top">
+                      <div className="content-left">
+                        <div className="label-favorite">Yêu thích</div>
+                        <span className="label-name-shop">Eiser shop</span>
+                        <div className="view-shop">
+                          <i className="fas fa-store"></i>
+                          <a style={{ color: "black" }} href="/shop">
+                            Xem shop
+                          </a>
+                        </div>
+                      </div>
+                      <div className="content-right text-success bg-light p-2 rounded shadow-sm">
+                        <b
+                          style={{
+                            border: "2px solid rgba(255, 0, 0, 0.5)",
+                            borderRadius: "8px",
+                            padding: "5px 6px",
+                            color: "green",
+                          }}
+                        >
+                          <i class="fa-solid fa-check text-success me-2"></i>
+                          {item.statusOrderData &&
+                            item.statusOrderData.value}{" "}
+                          {item.isPaymentOnlien === 1 && " | Đã thanh toán"}
+                        </b>
+                      </div>
+                    </div>
+                    {item.orderDetail &&
+                      item.orderDetail.length > 0 &&
+                      item.orderDetail.map((itemDetail, index) => {
+                        price +=
+                          itemDetail.quantity *
+                          itemDetail.productDetail.discountPrice;
+                        return (
+                          <div className="content-center" key={index}>
+                            <div className="box-item-order">
+                              <img
+                                src={itemDetail.productImage[0].image}
+                                alt={itemDetail.product.name}
+                              />
+                              <div className="box-des">
+                                <span className="name">
+                                  {itemDetail.product.name}
+                                </span>
+                                <span className="type">
+                                  Phân loại hàng:{" "}
+                                  {itemDetail.productDetail.nameDetail} |{" "}
+                                  {itemDetail.productDetailSize.sizeData.value}
+                                </span>
+                                <span>x{itemDetail.quantity}</span>
+                              </div>
+                              <div className="box-price">
+                                {CommonUtils.formatter.format(
+                                  itemDetail.productDetail.discountPrice
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                  <div className="content-bottom">
+                    <div className="up">
+                      <span>Tổng số tiền: </span>
+                      <span className="name">
+                        {item && item.voucherData && item.voucherData.id
+                          ? CommonUtils.formatter.format(
+                              totalPriceDiscount(price, item.voucherData) +
+                                item.typeShipData.price
+                            )
+                          : CommonUtils.formatter.format(
+                              price + +item.typeShipData.price
+                            )}
+                      </span>
+                      <div style={{ display: "none" }}>{(price = 0)}</div>
+                    </div>
+                    {/* ... */}
+                    <div className="down">
+                      {(item.statusId === "S3" || item.statusId === "S4") &&
+                        (item.isPaymentOnlien === 0 ||
+                          item.isPaymentOnlien === 1) && (
+                          <div
+                            className="btn-buy"
+                            onClick={() => handleCancelOrder(item)}
+                          >
+                            Hủy đơn
+                          </div>
+                        )}
+
+                      {item.statusId == "S5" && (
+                        <div
+                          className="alert bg-white text-primary border border-info"
+                          role="alert"
+                        >
+                          Theo dõi đơn hàng
+                        </div>
+                      )}
+
+                      {item.statusId == "S6" && (
+                        <>
+                          <div
+                            className="btn-buy"
+                            onClick={() => handleReceivedOrder3(item.id)}
+                          >
+                            Xác nhận đã nhận hàng
+                          </div>
+                          {item.statusId === "S6" &&
+                            (item.isPaymentOnlien === 0 ||
+                              item.isPaymentOnlien === 1) && (
+                              <div
+                                className="btn-buy"
+                                onClick={() => handleCancelOrder2(item)}
+                              >
+                                Chưa nhận
+                              </div>
+                            )}
+                        </>
+                      )}
+                    </div>
+                    {/* ... */}
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default OrderUser;
-
