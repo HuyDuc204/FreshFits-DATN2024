@@ -19,7 +19,7 @@ class CommonUtils {
         })
     }
     static formatter = new Intl.NumberFormat('en-VN', {
-        style: 'currency',
+        // style: 'currency',
         currency: 'VND',
         minimumFractionDigits: PREFIX_CURRENCY.minimumFractionDigits
     })
