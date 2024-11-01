@@ -1,0 +1,26 @@
+.nav-tabss {
+    border-bottom: 2px solid #71cd14; // Đường viền dưới màu đỏ
+
+    .nav-item {
+        margin-right: 20px; // Thêm khoảng cách giữa các tab
+
+        .nav-link {
+            padding: 10px 15px;
+            color: #495057; // Màu chữ mặc định
+            background-color: transparent; // Đảm bảo nền mặc định là trong suốt
+            transition: background-color 0.3s; // Hiệu ứng chuyển màu mượt mà
+
+            &.active {
+                background-color: #71cd14!important; // Màu nền cho tab đang hoạt động (đỏ)
+                color: #fff; // Màu chữ cho tab đang hoạt động
+                border: 2px solid #20b72b; // Đường viền cho tab đang hoạt động
+                border-bottom: none; // Ẩn đường viền dưới của tab đang hoạt động
+                border-radius: 5px 5px 0 0; // Bo tròn góc trên cho tab đang hoạt động
+            }
+
+            &:hover {
+                background-color: rgba(255, 111, 97, 0.2); // Hiệu ứng hover
+            }
+        }
+    }
+}
