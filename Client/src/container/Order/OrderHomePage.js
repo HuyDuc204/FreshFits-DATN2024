@@ -147,7 +147,6 @@ function OrderHomePage(props) {
         object.realPrice = item.productDetail.discountPrice;
         result.push(object);
       });
-  
 
       if (activeTypePayment == 0) {
         let res = await createNewOrderService({
@@ -160,7 +159,7 @@ function OrderHomePage(props) {
           userId: userId,
           arrDataShopCart: result,
         });
-        
+
         if (res && res.errCode === 0) {
           toast.success("Đặt hàng thành công");
           dispatch(getItemCartStart(userId));
@@ -176,10 +175,10 @@ function OrderHomePage(props) {
             ? totalPriceDiscount(price, dataVoucher) + priceShip
             : price + +priceShip;
         total = parseFloat((total / EXCHANGE_RATES.USD).toFixed(2));
+
         if (activeTypeOnlPayment === 1) {
-          toast.error("Vui lòng chọn phương thức thanh toán")
-        } else {
-          history.push({
+         
+                    history.push({
             pathname: "/payment/vnpay",
             orderData: {
               orderdate: Date.now(),
@@ -196,6 +195,8 @@ function OrderHomePage(props) {
                   : price + +priceShip,
             },
           });
+        } else {
+ toast.error("Vui lòng chọn phương thức thanh toán");
         }
       }
     }
@@ -213,7 +214,7 @@ function OrderHomePage(props) {
             <div className="content-up">
               <div className="content-left">
                 <i className="fas fa-map-marker-alt"></i>
-                <span>## Địa Chỉ Nhận Hàng</span>
+                <span># Địa Chỉ Nhận Hàng</span>
               </div>
               {isChangeAdress === true && (
                 <div className="content-right">
@@ -447,7 +448,7 @@ function OrderHomePage(props) {
                     : "box-type-payment"
                 }
               >
-                Thanh toán Online
+                Thanh toán VNPAY
               </div>
 
               <div
@@ -461,28 +462,14 @@ function OrderHomePage(props) {
                 Thanh toán khi nhận hàng
               </div>
             </div>
-            {activeTypePayment != 0 && (
-              <div className="box-payment">
-           
-                <div
-                  onClick={() => setactiveTypeOnlPayment(2)}
-                  className={
-                    activeTypeOnlPayment === 2
-                      ? "box-type-payment activeOnl"
-                      : "box-type-payment"
-                  }
-                >
-                  Thanh toán VNPAY
-                </div>
-              </div>
-            )}
+      
           </div>
 
           <div className="content-bottom">
             <div className="wrap-bottom">
               <div className="box-flex">
                 <div className="head">Tổng tiền hàng</div>
-                <div>{CommonUtils.formatter.format(price)}</div>
+                <div>{CommonUtils.formatter.format(price)} VNĐ</div>
               </div>
               <div className="box-flex">
                 <div className="head">Tổng giảm giá</div>
@@ -491,23 +478,23 @@ function OrderHomePage(props) {
                     ? CommonUtils.formatter.format(
                         price - totalPriceDiscount(price, dataVoucher)
                       )
-                    : CommonUtils.formatter.format(0)}
+                    : CommonUtils.formatter.format(0)} VNĐ
                 </div>
               </div>
               <div className="box-flex">
                 <div className="head">Phí vận chuyển</div>
-                <div>{CommonUtils.formatter.format(priceShip)}</div>
+                <div>{CommonUtils.formatter.format(priceShip)} VNĐ</div>
               </div>
 
               <div className="box-flex">
                 <div className="head">Tổng thanh toán:</div>
                 <div className="money">
-                  $
+                  
                   {dataVoucher && dataVoucher.voucherData
                     ? CommonUtils.formatter.format(
                         totalPriceDiscount(price, dataVoucher) + priceShip
                       )
-                    : CommonUtils.formatter.format(price + +priceShip)}
+                    : CommonUtils.formatter.format(price + +priceShip)} VNĐ
                 </div>
               </div>
               <div className="box-flex">
