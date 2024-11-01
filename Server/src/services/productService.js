@@ -1181,4 +1181,3 @@ module.exports = {
     getProductShopCart: getProductShopCart,
     getProductRecommend: getProductRecommend
 }
-//product

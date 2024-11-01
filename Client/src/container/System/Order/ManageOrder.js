@@ -2,17 +2,12 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { getAllOrder } from '../../../services/userService';
 import moment from 'moment';
-import { toast } from 'react-toastify';
 import { PAGINATION } from '../../../utils/constant';
 import ReactPaginate from 'react-paginate';
 import { useFetchAllcode } from '../../customize/fetch';
-import CommonUtils from '../../../utils/CommonUtils';
 import {
     BrowserRouter as Router,
-    Switch,
-    Route,
     Link,
-    Redirect
 } from "react-router-dom";
 const ManageOrder = () => {
 
@@ -63,18 +58,7 @@ const ManageOrder = () => {
 
         }
     }
-    let handleOnClickExport = async () => {
-        let res = await getAllOrder({
 
-            limit: '',
-            offset: '',
-            statusId: 'ALL'
-        })
-        if (res && res.errCode == 0) {
-            await CommonUtils.exportExcel(res.data, "Danh sách đơn hàng", "ListOrder")
-        }
-
-    }
     return (
         <div className="container-fluid px-4">
             <h1 className="mt-4">Quản lý đơn đặt hàng</h1>
@@ -100,7 +84,6 @@ const ManageOrder = () => {
                     <div className='row'>
 
                         <div className='col-12 mb-2'>
-                            <button style={{ float: 'right' }} onClick={() => handleOnClickExport()} className="btn btn-success" >Xuất excel <i class="fa-solid fa-file-excel"></i></button>
                         </div>
                     </div>
                     <div className="table-responsive">
@@ -172,4 +155,3 @@ const ManageOrder = () => {
     )
 }
 export default ManageOrder;
-//Danh sach Order
