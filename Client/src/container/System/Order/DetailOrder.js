@@ -80,7 +80,7 @@ function DetailOrder(props) {
   let handleSuccessShip = async () => {
     let res = await updateStatusOrderService({
       id: DataOrder.id,
-      statusId: "S6",
+      statusId: "S8",
     });
     if (res && res.errCode == 0) {
       toast.success("Đã giao hàng thành công");
