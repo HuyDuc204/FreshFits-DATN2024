@@ -15,13 +15,13 @@ import {
 } from "react-router-dom";
 
 const ManageReceipt = () => {
-
+  
     const [dataReceipt, setdataReceipt] = useState([])
     const [count, setCount] = useState('')
     const [numberPage, setnumberPage] = useState('')
     useEffect(() => {
         try {
-
+           
             fetchData();
         } catch (error) {
             console.log(error)
@@ -31,10 +31,10 @@ const ManageReceipt = () => {
     let fetchData = async () => {
         let arrData = await getAllReceipt({
 
-
+           
             limit: PAGINATION.pagerow,
             offset: 0,
-
+           
 
         })
         if (arrData && arrData.errCode === 0) {
@@ -42,15 +42,15 @@ const ManageReceipt = () => {
             setCount(Math.ceil(arrData.count / PAGINATION.pagerow))
         }
     }
-
+    
     let handleChangePage = async (number) => {
         setnumberPage(number.selected)
         let arrData = await getAllReceipt({
 
-
+          
             limit: PAGINATION.pagerow,
             offset: number.selected * PAGINATION.pagerow,
-
+            
 
         })
         if (arrData && arrData.errCode === 0) {
@@ -58,8 +58,8 @@ const ManageReceipt = () => {
 
         }
     }
-
-
+    
+ 
     return (
         <div className="container-fluid px-4">
             <h1 className="mt-4">Quản lý nhập hàng</h1>
@@ -71,12 +71,11 @@ const ManageReceipt = () => {
                     Danh sách nhập hàng
                 </div>
                 <div className="card-body">
-
+               
                     <div className='row'>
-
-                        <div className='col-12'>
-                            <button style={{ float: 'right' }} onClick={() => handleOnClickExport()} className="btn btn-success mb-2" >Xuất excel <i class="fa-solid fa-file-excel"></i></button>
-                        </div>
+                   
+                    <div className='col-12'>
+                    </div>
                     </div>
                     <div className="table-responsive">
                         <table className="table table-bordered" style={{ border: '1' }} width="100%" cellspacing="0">
@@ -100,12 +99,12 @@ const ManageReceipt = () => {
                                                 <td>{moment.utc(item.createdAt).local().format('DD/MM/YYYY HH:mm:ss')}</td>
                                                 <td>{item.supplierData.name}</td>
                                                 <td>{item.supplierData.phonenumber}</td>
-                                                <td>{item.userData.firstName + " " + item.userData.lastName}</td>
-
+                                                <td>{item.userData.firstName +" "+item.userData.lastName}</td>
+                                              
                                                 <td>
                                                     <Link to={`/admin/detail-receipt/${item.id}`}>view</Link>
                                                     &nbsp; &nbsp;
-
+                                                   
                                                 </td>
                                             </tr>
                                         )
@@ -139,4 +138,3 @@ const ManageReceipt = () => {
     )
 }
 export default ManageReceipt;
-//Danh sach Receipt Nhi
