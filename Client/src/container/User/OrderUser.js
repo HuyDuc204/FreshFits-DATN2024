@@ -106,7 +106,7 @@ function OrderUser(props) {
   let handleReceivedOrder = async (orderId) => {
     let res = await updateStatusOrderService({
       id: orderId,
-      statusId: "S6",
+      statusId: "S8",
     });
     if (res && res.errCode == 0) {
       toast.success("Đã nhận đơn hàng");
@@ -117,7 +117,7 @@ function OrderUser(props) {
   let handleReceivedOrder3 = async (orderId) => {
     let res = await updateStatusOrderService({
       id: orderId,
-      statusId: "S8",
+      statusId: "S6",
     });
     if (res && res.errCode == 0) {
       toast.success("Xác nhận đã nhận đơn hàng thành công");
@@ -313,7 +313,7 @@ function OrderUser(props) {
                         </div>
                       )}
 
-                      {item.statusId == "S6" && (
+                      {item.statusId == "S8" && (
                         <>
                           <div
                             className="btn-buy"
@@ -321,7 +321,7 @@ function OrderUser(props) {
                           >
                             Xác nhận đã nhận hàng
                           </div>
-                          {item.statusId === "S6" &&
+                          {item.statusId === "S8" &&
                             (item.isPaymentOnlien === 0 ||
                               item.isPaymentOnlien === 1) && (
                               <div
