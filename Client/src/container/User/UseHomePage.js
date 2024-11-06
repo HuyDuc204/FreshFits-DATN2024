@@ -8,9 +8,11 @@ import {
 } from "react-router-dom";
 import DetailUserPage from './DetailUserPage';
 import CategoryUser from './CategoryUser';
+import StoreVoucher from './StoreVoucher';
 import AddressUser from './AddressUser';
 import ChangePassword from '../System/User/ChangePassword';
 import OrderUser from './OrderUser';
+import MessagePage from '../Message/MessagePage';
 
 function UserHomePage(props) {
     const [user, setUser] = useState({})
@@ -31,13 +33,18 @@ function UserHomePage(props) {
                     <Route exact path="/user/detail/:id">
                         <DetailUserPage />
                     </Route>
-                
+                    <Route exact path="/user/store-voucher/:id">
+                        <StoreVoucher id={user.id} />
+                    </Route>
                     <Route exact path="/user/address/:id">
                         <AddressUser id={user.id} />
                     </Route>
+
                     <Route exact path="/user/order/:id">
                         <OrderUser id={user.id} />
                     </Route>
+
+                    
                     <Route exact path="/user/changepassword/:id">
                         <ChangePassword id={user.id} />
                     </Route>
