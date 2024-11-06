@@ -23,7 +23,7 @@ const ManageSupplier = () => {
     const [numberPage, setnumberPage] = useState('')
     useEffect(() => {
         try {
-
+           
             fetchData(keyword);
         } catch (error) {
             console.log(error)
@@ -33,10 +33,10 @@ const ManageSupplier = () => {
     let fetchData = async (keyword) => {
         let arrData = await getAllSupplier({
 
-
+           
             limit: PAGINATION.pagerow,
             offset: 0,
-            keyword: keyword
+            keyword:keyword
 
         })
         if (arrData && arrData.errCode === 0) {
@@ -55,10 +55,10 @@ const ManageSupplier = () => {
             toast.success("Xóa nhà cung cấp thành công")
             let arrData = await getAllSupplier({
 
-
+              
                 limit: PAGINATION.pagerow,
                 offset: numberPage * PAGINATION.pagerow,
-                keyword: keyword
+                keyword:keyword
             })
             if (arrData && arrData.errCode === 0) {
                 setdataSupplier(arrData.data)
@@ -71,10 +71,10 @@ const ManageSupplier = () => {
         setnumberPage(number.selected)
         let arrData = await getAllSupplier({
 
-
+          
             limit: PAGINATION.pagerow,
             offset: number.selected * PAGINATION.pagerow,
-            keyword: keyword
+            keyword:keyword
 
         })
         if (arrData && arrData.errCode === 0) {
@@ -82,27 +82,17 @@ const ManageSupplier = () => {
 
         }
     }
-    let handleSearchSupplier = (keyword) => {
+    let handleSearchSupplier = (keyword) =>{
         fetchData(keyword)
         setkeyword(keyword)
     }
-    let handleOnchangeSearch = (keyword) => {
-        if (keyword === '') {
+    let handleOnchangeSearch = (keyword) =>{
+        if(keyword === ''){
             fetchData(keyword)
             setkeyword(keyword)
         }
     }
-    let handleOnClickExport = async () => {
-        let res = await getAllSupplier({
-            limit: '',
-            offset: '',
-            keyword: ''
-        })
-        if (res && res.errCode == 0) {
-            await CommonUtils.exportExcel(res.data, "Danh sách nhà cung cấp", "ListSupplier")
-        }
-
-    }
+ 
     return (
         <div className="container-fluid px-4">
             <h1 className="mt-4">Quản lý nhà cung cấp</h1>
@@ -114,14 +104,13 @@ const ManageSupplier = () => {
                     Danh sách nhà cung cấp sản phẩm
                 </div>
                 <div className="card-body">
-
+               
                     <div className='row'>
-                        <div className='col-4'>
-                            <FormSearch title={"tên nhà cung cấp"} handleOnchange={handleOnchangeSearch} handleSearch={handleSearchSupplier} />
-                        </div>
-                        <div className='col-8'>
-                            <button style={{ float: 'right' }} onClick={() => handleOnClickExport()} className="btn btn-success" >Xuất excel <i class="fa-solid fa-file-excel"></i></button>
-                        </div>
+                    <div  className='col-4'>
+                    <FormSearch title={"tên nhà cung cấp"}  handleOnchange={handleOnchangeSearch} handleSearch={handleSearchSupplier} />
+                    </div>
+                    <div className='col-8'>
+                    </div>
                     </div>
                     <div className="table-responsive">
                         <table className="table table-bordered" style={{ border: '1' }} width="100%" cellspacing="0">
