@@ -59,17 +59,7 @@ const ManageReceipt = () => {
         }
     }
 
-    let handleOnClickExport = async () => {
-        let res = await getAllReceipt({
-            limit: '',
-            offset: '',
 
-        })
-        if (res && res.errCode == 0) {
-            await CommonUtils.exportExcel(res.data, "Danh sách nhập hàng", "ListReceipt")
-        }
-
-    }
     return (
         <div className="container-fluid px-4">
             <h1 className="mt-4">Quản lý nhập hàng</h1>
