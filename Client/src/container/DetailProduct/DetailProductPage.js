@@ -12,6 +12,8 @@ import ReviewProduct from "../../component/Product/ReviewProduct";
 import DescriptionProduct from "../../component/Product/DescriptionProduct";
 import NewProductFeature from "../../component/HomeFeature/NewProductFeature";
 import ProductFeature from "../../component/HomeFeature/ProductFeature";
+import "./DetailProductPage.scss"; // Đảm bảo bạn đã tạo file SCSS này
+
 function DetailProductPage(props) {
   const [dataProduct, setDataProduct] = useState({});
   const [dataDetailSize, setdataDetailSize] = useState({});
@@ -78,7 +80,7 @@ function DetailProductPage(props) {
       </div>
       <section className="product_description_area">
         <div className="container">
-          <ul className="nav nav-tabs" id="myTab" role="tablist">
+          <ul className="nav nav-tabss" id="myTab" role="tablist">
             <li className="nav-item">
               <a
                 className="nav-link active"
