@@ -94,8 +94,8 @@
 }
 
 ////////////////////////////
-/// 
-/// 
+///
+///
 .custom-toast {
   position: fixed;
   bottom: 20px;
@@ -145,14 +145,12 @@
   }
 }
 
-// Thêm hiệu ứng cho thông báo khi xuất hiện
-@keyframes slideIn {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+.toast-center {
+  text-align: center;
+
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
   }
 }

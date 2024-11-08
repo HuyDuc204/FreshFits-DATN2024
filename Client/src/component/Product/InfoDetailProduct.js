@@ -71,21 +71,19 @@ function InfoDetailProduct(props) {
       );
 
       toast.success(
-        <div>
-          <b>
-            {" "}
-            <p>Sản phẩm đã được thêm vào giỏ hàng!</p>
-          </b>
-
-          <button
-            onClick={() => history.push("/shopcart")}
-            className="btn btn-primary me-2" // Thêm lớp Bootstrap cho nút
-          >
-            Đi đến giỏ hàng
-          </button>
-          <button onClick={() => toast.dismiss()} className="btn btn-secondary">
-            Hủy
-          </button>
+        <div className="text-center">
+          <p className="mb-2 font-weight-bold">Sản phẩm đã được thêm vào giỏ hàng!</p>
+          <div className="d-flex justify-content-center">
+            <button
+              onClick={() => history.push("/shopcart")}
+              className="btn btn-primary me-2"
+            >
+              Đi đến giỏ hàng
+            </button>
+            <button onClick={() => toast.dismiss()} className="btn btn-secondary">
+              Hủy
+            </button>
+          </div>
         </div>
       );
     } else {
