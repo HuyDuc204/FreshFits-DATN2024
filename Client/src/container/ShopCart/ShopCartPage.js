@@ -188,11 +188,11 @@ function ShopCartPage(props) {
                         <div className="wrap-voucher">
                             <img width="20px" height="20px" style={{ marginLeft: "-3px" }} src={storeVoucherLogo}></img>
                             <span className="name-easier">Easier voucher</span>
-                            {/* <span onClick={() => handleOpenModal()} className="choose-voucher">Chọn Hoặc Nhập Mã</span>
+                            <span onClick={() => handleOpenModal()} className="choose-voucher">Chọn Hoặc Nhập Mã</span>
                             {dataVoucher && dataVoucher.voucherData &&
                                 <span className="choose-voucher">Mã voucher: {dataVoucher.voucherData.codeVoucher}</span>
-                            } */}
-                                <span  className="choose-voucher">Chọn Hoặc Nhập Mã</span>
+                            }
+                                
                           
                            
 
