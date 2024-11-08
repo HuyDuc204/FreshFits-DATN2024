@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import {
   BrowserRouter as Router,
   Switch,
@@ -23,6 +25,8 @@ function OrderUser(props) {
   const [confirmedOrders, setConfirmedOrders] = useState(new Set()); // Thêm state để lưu trữ đơn hàng đã xác nhận
   let price = 0;
   const [priceShip, setpriceShip] = useState(0);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     loadDataOrder();
@@ -56,125 +60,41 @@ function OrderUser(props) {
     }
   };
 
-  const handleCancelOrder = (data) => {
-    const reasons = [
-      "Tôi muốn cập nhật địa chỉ/sdt nhận hàng",
-      "Người bán không trả lời thắc mắc / yêu cầu của tôi",
-      "Thay đổi đơn hàng(màu sắc, kích thước, thêm mã giảm,...)",
-      "Tôi không không có nhu cầu mua nữa",
-      "Khác lý do",
-    ];
-
-    toast.info(
-      <div>
-        <p>Vui lòng chọn lý do hủy đơn:</p>
-        {reasons.map((reason, index) => (
-          <button
-            key={index}
-            onClick={() => confirmCancelOrder(data, reason)}
-            style={{
-              display: "block",
-              margin: "5px 0",
-              backgroundColor: "#f44336",
-              color: "#fff",
-              border: "none",
-              padding: "8px",
-              cursor: "pointer",
-              borderRadius: "4px",
-            }}
-          >
-            {reason}
-          </button>
-        ))}
-      </div>,
-      { position: "top-center", autoClose: false }
-    );
+  const handleCancelOrder = (order) => {
+    setSelectedOrder(order);
+    setShowCancelModal(true);
   };
 
-  const confirmCancelOrder = async (data, reason) => {
-    let res = await updateStatusOrderService({
-      id: data.id,
+  const confirmCancelOrder = async (order, reason) => {
+    const res = await updateStatusOrderService({
+      id: order.id,
       statusId: "S7",
-      dataOrder: data,
+      dataOrder: order,
     });
     if (res && res.errCode === 0) {
-      toast.success(`Hủy đơn hàng thành công. Lý do: ${reason}`);
+      toast.success(`Đã hủy đơn hàng thành công. Lý do: ${reason}`);
       loadDataOrder();
+      setShowCancelModal(false);
     }
   };
-
-  let handleReceivedOrder = async (orderId) => {
-    let res = await updateStatusOrderService({
-      id: orderId,
-      statusId: "S8",
-    });
-    if (res && res.errCode == 0) {
-      toast.success("Đã nhận đơn hàng");
-      loadDataOrder();
-    }
-  };
-
-  let handleReceivedOrder3 = async (orderId) => {
+  const handleReceivedOrder3 = async (orderId) => {
     let res = await updateStatusOrderService({
       id: orderId,
       statusId: "S6",
     });
-    if (res && res.errCode == 0) {
-      toast.success("Xác nhận đã nhận đơn hàng thành công");
+    if (res && res.errCode === 0) {
       loadDataOrder();
     }
   };
-
-  let handleCancelOrder2 = async (data) => {
-    toast.success(
-      <div>
-        Bạn chưa nhận được hàng! Vui lòng kiểm tra lại.
-        <div>
-          <button
-            onClick={async () => {
-              // Xử lý xác nhận
-              let res = await updateStatusOrderService({
-                id: data.id,
-                statusId: "S9",
-                dataOrder: data,
-              });
-              if (res && res.errCode === 0) {
-                toast.success("Đã xác nhận bạn chưa nhận được hàng.");
-                loadDataOrder();
-              }
-            }}
-            style={{
-              backgroundColor: "#4caf50",
-              color: "#fff",
-              border: "none",
-              padding: "8px 16px",
-              borderRadius: "4px",
-              marginRight: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Xác nhận
-          </button>
-          <button
-            onClick={() => {
-              // Xử lý hủy
-              toast.info("Hủy hành động xác nhận.");
-            }}
-            style={{
-              backgroundColor: "#f44336",
-              color: "#fff",
-              border: "none",
-              padding: "8px 16px",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-          >
-            Hủy
-          </button>
-        </div>
-      </div>,
-      { position: "top-center", autoClose: false }
-    );
+  const handleCancelOrder2 = async (data) => {
+    let res = await updateStatusOrderService({
+      id: data.id,
+      statusId: "S9",
+      dataOrder: data,
+    });
+    if (res && res.errCode === 0) {
+      loadDataOrder();
+    }
   };
 
   let totalPriceDiscount = (price, discount) => {
@@ -341,6 +261,39 @@ function OrderUser(props) {
             })}
         </div>
       </div>
+
+      <Modal
+        isOpen={showCancelModal}
+        toggle={() => setShowCancelModal(false)}
+        centered
+      >
+        <ModalHeader toggle={() => setShowCancelModal(false)}>
+          Lý do hủy đơn hàng
+        </ModalHeader>
+        <ModalBody>
+          {[
+            "Tôi muốn cập nhật địa chỉ/sdt nhận hàng",
+            "Người bán không trả lời thắc mắc",
+            "Thay đổi đơn hàng",
+            "Tôi không có nhu cầu mua nữa",
+            "Khác lý do",
+          ].map((reason, index) => (
+            <Button
+              key={index}
+              variant="outline-danger"
+              className="w-100 mb-2"
+              onClick={() => confirmCancelOrder(selectedOrder, reason)}
+            >
+              {reason}
+            </Button>
+          ))}
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="secondary" onClick={() => setShowCancelModal(false)}>
+            Đóng
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 }
