@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useHistory, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import {
   getDetailOrder,
   updateStatusOrderService,
@@ -17,11 +18,14 @@ function DetailOrder(props) {
   const [DataOrder, setDataOrder] = useState({});
   const [imgPreview, setimgPreview] = useState("");
   const [isOpen, setisOpen] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   let price = 0;
   const [priceShip, setpriceShip] = useState(0);
   useEffect(() => {
     loadDataOrder();
   }, []);
+
   let openPreviewImage = (url) => {
     setimgPreview(url);
     setisOpen(true);
@@ -83,11 +87,11 @@ function DetailOrder(props) {
       id: DataOrder.id,
       statusId: "S8",
     });
-  
+
     if (res && res.errCode == 0) {
       toast.success("Đã giao hàng thành công");
       loadDataOrder();
-  
+
       // Thiết lập delay 1 phút (60 giây) để thay đổi trạng thái
       setTimeout(async () => {
         let updatedRes = await updateStatusOrderService({
@@ -101,41 +105,12 @@ function DetailOrder(props) {
       }, 86400000); // 86400000 = 1 ngày
     }
   };
-  const handleCancelOrder = (data) => {
-    const reasons = [
-      "Thay đổi trong chính sách vận chuyển",
-      "Vấn đề với phương thức thanh toán",
-      "Lỗi giá",
-      "Nguyên nhân kỹ thuật",
-      "Hết hàng",
-      "Thông tin giao hàng không chính xác",
-    ];
 
-    toast.info(
-      <div>
-        <p>Vui lòng chọn lý do hủy đơn:</p>
-        {reasons.map((reason, index) => (
-          <button
-            key={index}
-            onClick={() => confirmCancelOrder(data, reason)}
-            style={{
-              display: "block",
-              margin: "5px 0",
-              backgroundColor: "#f44336",
-              color: "#fff",
-              border: "none",
-              padding: "8px",
-              cursor: "pointer",
-              borderRadius: "4px",
-            }}
-          >
-            {reason}
-          </button>
-        ))}
-      </div>,
-      { position: "top-center", autoClose: false }
-    );
+  const handleCancelOrder = (order) => {
+    setSelectedOrder(order);
+    setShowCancelModal(true);
   };
+
   const confirmCancelOrder = async (data, reason) => {
     let res = await updateStatusOrderService({
       id: data.id,
@@ -427,6 +402,42 @@ function DetailOrder(props) {
             </div>
           </div>
         </div>
+
+        <Modal
+          isOpen={showCancelModal}
+          toggle={() => setShowCancelModal(false)}
+          centered
+        >
+          <ModalHeader toggle={() => setShowCancelModal(false)}>
+            Lý do hủy đơn hàng
+          </ModalHeader>
+          <ModalBody>
+            {[
+              "Tôi muốn cập nhật địa chỉ/sdt nhận hàng",
+              "Người bán không trả lời thắc mắc",
+              "Thay đổi đơn hàng",
+              "Tôi không có nhu cầu mua nữa",
+              "Khác lý do",
+            ].map((reason, index) => (
+              <Button
+                key={index}
+                variant="outline-danger"
+                className="w-100 mb-2"
+                onClick={() => confirmCancelOrder(selectedOrder, reason)}
+              >
+                {reason}
+              </Button>
+            ))}
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant="secondary"
+              onClick={() => setShowCancelModal(false)}
+            >
+              Đóng
+            </Button>
+          </ModalFooter>
+        </Modal>
       </div>
       <div
         style={{ width: "100%", height: "100px", backgroundColor: "#f5f5f5" }}

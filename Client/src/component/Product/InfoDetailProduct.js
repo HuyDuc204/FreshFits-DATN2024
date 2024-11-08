@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { addItemCartStart } from "../../action/ShopCartAction";
 import "./InfoDetailProduct.scss";
 import CommonUtils from "../../utils/CommonUtils";
@@ -10,6 +10,8 @@ import { useHistory } from "react-router-dom"; // Thêm import này
 
 function InfoDetailProduct(props) {
   const history = useHistory(); // Khởi tạo useHistory
+  const dispatch = useDispatch();
+
   let { dataProduct } = props;
   let [arrDetail, setarrDetail] = useState([]);
   const [productDetail, setproductDetail] = useState([]);
@@ -18,10 +20,10 @@ function InfoDetailProduct(props) {
   const [activeLinkId, setactiveLinkId] = useState("");
   const [quantity, setquantity] = useState("");
   const [quantityProduct, setquantityProduct] = useState(1);
+  const [modalOpen, setModalOpen] = useState(false); // State cho modal
 
   useEffect(() => {
     let { productDetail } = dataProduct ? dataProduct : [];
-
     if (productDetail) {
       setproductDetail(productDetail);
       setarrDetail(productDetail[0]);
@@ -31,7 +33,7 @@ function InfoDetailProduct(props) {
     }
   }, [props.dataProduct]);
 
-  let handleSelectDetail = (event) => {
+  const handleSelectDetail = (event) => {
     setarrDetail(productDetail[event.target.value]);
     if (
       productDetail[event.target.value] &&
@@ -47,20 +49,18 @@ function InfoDetailProduct(props) {
     }
   };
 
-  let openPreviewImage = (url) => {
+  const openPreviewImage = (url) => {
     setimgPreview(url);
     setisOpen(true);
   };
 
-  let handleClickBoxSize = (data) => {
+  const handleClickBoxSize = (data) => {
     setactiveLinkId(data.id);
     setquantity(data.stock);
     props.sendDataFromInforDetail(data);
   };
 
-  const dispatch = useDispatch();
-
-  let handleAddShopCart = () => {
+  const handleAddShopCart = () => {
     if (props.userId) {
       dispatch(
         addItemCartStart({
@@ -69,30 +69,31 @@ function InfoDetailProduct(props) {
           quantity: quantityProduct,
         })
       );
-
-      toast.success(
-        <div className="text-center">
-          <p className="mb-2 font-weight-bold">Sản phẩm đã được thêm vào giỏ hàng!</p>
-          <div className="d-flex justify-content-center">
-            <button
-              onClick={() => history.push("/shopcart")}
-              className="btn btn-primary me-2"
-            >
-              Đi đến giỏ hàng
-            </button>
-            <button onClick={() => toast.dismiss()} className="btn btn-secondary">
-              Hủy
-            </button>
-          </div>
-        </div>
-      );
+      setModalOpen(true); // Mở modal khi thêm vào giỏ hàng
     } else {
-      toast.error("Đăng nhập để thêm vào giỏ hàng");
+      alert("Đăng nhập để thêm vào giỏ hàng");
     }
   };
 
+  const closeModal = () => setModalOpen(false);
+
   return (
     <div className="row s_product_inner">
+      {/* Modal thông báo thêm vào giỏ hàng */}
+      <Modal isOpen={modalOpen} toggle={closeModal}>
+        <ModalHeader toggle={closeModal}>Thông báo</ModalHeader>
+        <ModalBody>Sản phẩm đã được thêm vào giỏ hàng!</ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={() => history.push("/shopcart")}>
+            Đi đến giỏ hàng
+          </Button>
+          <Button color="secondary" onClick={closeModal}>
+            Hủy
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      {/* Nội dung sản phẩm */}
       <div className="col-lg-6">
         <div className="s_product_img">
           <div
@@ -148,6 +149,7 @@ function InfoDetailProduct(props) {
           </div>
         </div>
       </div>
+
       <div className="col-lg-5 offset-lg-1">
         <div className="s_product_text">
           <h3>{dataProduct.name}</h3>
@@ -254,13 +256,13 @@ function InfoDetailProduct(props) {
             </a>
           </div>
         </div>
+        {isOpen && (
+          <Lightbox
+            mainSrc={imgPreview}
+            onCloseRequest={() => setisOpen(false)}
+          />
+        )}
       </div>
-      {isOpen && (
-        <Lightbox
-          mainSrc={imgPreview}
-          onCloseRequest={() => setisOpen(false)}
-        />
-      )}
     </div>
   );
 }
