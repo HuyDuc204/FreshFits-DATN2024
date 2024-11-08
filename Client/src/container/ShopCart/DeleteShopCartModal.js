@@ -27,34 +27,31 @@ const DeleteShopCartModal = (props) => {
     }
     return (
         <div className="">
-            <Modal isOpen={props.isOpenModal} className={'booking-modal-container'}
-                size="md" centered
-            >
+            <Modal isOpen={props.isOpenModal} className="booking-modal-container" size="md" centered>
                 <div className="modal-header">
-                    <h5 className="modal-title">Bạn chắc chắn muốn bỏ sản phẩm này?</h5>
-                    <button onClick={handleCloseModal} type="button" className="btn btn-time" aria-label="Close">X</button>
+                    <h5 className="modal-title text-center w-100">Bạn chắc chắn muốn bỏ sản phẩm này?</h5>
+                    <button
+                        onClick={handleCloseModal}
+                        type="button"
+                        className="btn-close"
+                        aria-label="Close"
+                    ></button>
                 </div>
                 <ModalBody>
-                    <div style={{ padding: '10px 20px', fontSize: '20px' }} className="row">
+                    <div className="text-center" style={{ padding: '10px 20px', fontSize: '18px' }}>
                         {props.name}
-
                     </div>
                 </ModalBody>
-                <ModalFooter>
-                    <Button
-                        color="primary"
-                        onClick={handleDelete}
-                    >
+                <ModalFooter className="justify-content-center">
+                    <Button color="danger" onClick={handleDelete} className="me-2 px-4">
                         Thực hiện
                     </Button>
-                    {' '}
-                    <Button onClick={handleCloseModal}>
+                    <Button color="secondary" onClick={handleCloseModal} className="px-4">
                         Hủy
                     </Button>
                 </ModalFooter>
             </Modal>
-
-        </div >
+        </div>
     )
 }
 export default DeleteShopCartModal;
