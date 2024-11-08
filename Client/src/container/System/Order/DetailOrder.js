@@ -78,16 +78,29 @@ function DetailOrder(props) {
     }
   };
   let handleSuccessShip = async () => {
+    // Gửi yêu cầu xác nhận "đã giao hàng" ngay lập tức
     let res = await updateStatusOrderService({
       id: DataOrder.id,
       statusId: "S8",
     });
+  
     if (res && res.errCode == 0) {
       toast.success("Đã giao hàng thành công");
       loadDataOrder();
+  
+      // Thiết lập delay 1 phút (60 giây) để thay đổi trạng thái
+      setTimeout(async () => {
+        let updatedRes = await updateStatusOrderService({
+          id: DataOrder.id,
+          statusId: "S6", // Trạng thái đã giao hàng hoàn tất (có thể thay đổi theo hệ thống)
+        });
+        if (updatedRes && updatedRes.errCode == 0) {
+          toast.success("Đơn hàng đã được xác nhận giao hàng hoàn tất.");
+          loadDataOrder(); // Cập nhật lại dữ liệu đơn hàng sau khi thay đổi trạng thái
+        }
+      }, 86400000); // 86400000 = 1 ngày
     }
   };
-
   const handleCancelOrder = (data) => {
     const reasons = [
       "Thay đổi trong chính sách vận chuyển",
