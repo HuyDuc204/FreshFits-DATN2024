@@ -107,8 +107,8 @@ const ManageTypeShip = () => {
                                     <th>STT</th>
                                     <th>Loại voucher</th>
                                     <th>Giá trị</th>
-                                    <th>Đơn tối thiểu</th>
-                                    <th>Giảm tối đa</th>
+                                    <th>Đơn Từ</th>
+                                    <th>Giảm giá</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
@@ -120,7 +120,7 @@ const ManageTypeShip = () => {
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
                                                 <td>{item.typeVoucherData.value}</td>
-                                                <td>{item.typeVoucher == "percent" ? item.value + "%" : CommonUtils.formatter.format(item.value)}</td>
+                                                <td>{item.typeVoucher == "percent" ? item.value + "VNĐ" : CommonUtils.formatter.format(item.value)}</td>
                                                 <td>{CommonUtils.formatter.format(item.minValue)}</td>
                                                 <td>{CommonUtils.formatter.format(item.maxValue)}</td>
                                                 <td>

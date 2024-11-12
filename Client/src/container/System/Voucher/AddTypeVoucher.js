@@ -45,7 +45,61 @@ const AddTypeVoucher = (props) => {
         setInputValues({ ...inputValues, [name]: value });
 
     };
+
+
+
+
+    // Kiểm tra dữ liệu đầu vào
+const validateInputValues = () => {
+    // Kiểm tra không để trống bất kỳ ô input nào
+    for (let key in inputValues) {
+        if (inputValues[key] === '') {
+            toast.error("Vui lòng không để trống các trường");
+            return false;
+        }
+    }
+
+    // Kiểm tra giá trị loại voucher
+    if (inputValues.value < 0) {
+        toast.error("Giá trị loại voucher không được âm");
+        return false;
+    }
+    if (inputValues.value < 1000) {
+        toast.error("Giá trị loại voucher phải trên 1.000 VNĐ");
+        return false;
+    }
+    if (inputValues.value > 5000000) {
+        toast.error("Giá trị loại voucher không được vượt quá 5.000.000 VNĐ");
+        return false;
+    }
+
+    // Kiểm tra giá trị giảm giá phải giống giá trị loại voucher
+    if (inputValues.maxValue !== inputValues.value) {
+        toast.error("Giảm giá phải giống giá trị loại voucher");
+        return false;
+    }
+
+    // Kiểm tra giảm giá không âm và không quá 5.000.000 VNĐ
+    if (inputValues.minValue < 0 || inputValues.maxValue < 0) {
+        toast.error("Các giá trị không được là số âm");
+        return false;
+    }
+    if (inputValues.maxValue > 5000000) {
+        toast.error("Giảm giá không được vượt quá 5.000.000 VNĐ");
+        return false;
+    }
+
+    return true;
+};
+
+
+
     let handleSaveTypeVoucher = async () => {
+
+  // Gọi hàm validate
+  if (!validateInputValues()) return;
+
+
         if (isActionADD === true) {
             let res = await createNewTypeVoucherService({
                 typeVoucher: inputValues.typeVoucher,
@@ -113,7 +167,7 @@ const AddTypeVoucher = (props) => {
                                 </select>
                             </div>
                             <div className="form-group col-md-6">
-                                <label htmlFor="inputPassword4">Giá trị loại voucher</label>
+                                <label htmlFor="inputPassword4">Giá trị loại voucher (VNĐ)</label>
                                 <input type="text" value={inputValues.value} name="value" onChange={(event) => handleOnChange(event)} className="form-control" id="inputPassword4" />
                             </div>
                             <div className="form-group col-md-6">
@@ -121,7 +175,7 @@ const AddTypeVoucher = (props) => {
                                 <input type="number" value={inputValues.minValue} name="minValue" onChange={(event) => handleOnChange(event)} className="form-control" id="inputEmail4" />
                             </div>
                             <div className="form-group col-md-6">
-                                <label htmlFor="inputPassword4">Giảm tối đa</label>
+                                <label htmlFor="inputPassword4">Giảm giá (Giá trị loại Voucher)</label>
                                 <input type="number" value={inputValues.maxValue} name="maxValue" onChange={(event) => handleOnChange(event)} className="form-control" id="inputPassword4" />
                             </div>
                         </div>
