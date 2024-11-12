@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import {
+  Badge,
+  Progress,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "reactstrap";
 import {
   BrowserRouter as Router,
   Switch,
@@ -146,7 +154,8 @@ function OrderUser(props) {
                           </a>
                         </div>
                       </div>
-                      <div className="content-right text-success bg-light p-2 rounded shadow-sm">
+
+                      {/* <div className="content-right text-success bg-light p-2 rounded shadow-sm">
                         <b
                           style={{
                             border: "2px solid rgba(255, 0, 0, 0.5)",
@@ -160,6 +169,72 @@ function OrderUser(props) {
                             item.statusOrderData.value}{" "}
                           {item.isPaymentOnlien === 1 && " | Đã thanh toán"}
                         </b>
+                      </div> */}
+
+                      <div className="order-status">
+                        <b
+                          style={{
+                            border: "2px solid rgba(255, 0, 0, 0.5)",
+                            borderRadius: "8px",
+                            padding: "5px 6px",
+                            color: "green",
+                          }}
+                        >
+                          <i className="fa-solid fa-check text-success me-2"></i>
+                          {item.statusOrderData && item.statusOrderData.value}{" "}
+                          {item.isPaymentOnlien === 1 && " "}
+                        </b>
+
+                      {/* Thêm thanh trạng thái giao hàng tại đây */}
+<div className="delivery-status mt-4">
+  <div className="text-center">
+    {/* Chờ lấy hàng */}
+    {item.statusId === "S4" && (
+      <div className="status-item">
+        <Progress value={20} className="mt-2" color="warning" />
+        <div className="mt-2 text-warning">
+          <i className="fas fa-clock"></i>
+          <div>Chờ lấy hàng</div>
+        </div>
+      </div>
+    )}
+
+    {/* Chờ xác nhận */}
+    {item.statusId === "S3" && (
+      <div className="status-item">
+        <Progress value={40} className="mt-2" color="info" />
+        <div className="mt-2 text-info">
+          <i className="fas fa-check-circle"></i>
+          <div>Chờ xác nhận</div>
+        </div>
+      </div>
+    )}
+
+    {/* Đang giao hàng */}
+    {item.statusId === "S5" && (
+      <div className="status-item">
+        <Progress value={60} className="mt-2" color="primary" />
+        <div className="mt-2 text-primary">
+          <i className="fas fa-truck"></i>
+          <div>Đang giao hàng</div>
+        </div>
+      </div>
+    )}
+
+    {/* Đã giao hàng */}
+    {(item.statusId === "S8" || item.statusId === "S6") && (
+      <div className="status-item">
+        <Progress value={100} className="mt-2" color="success" />
+        <div className="mt-2 text-success">
+          <i className="fas fa-check-circle"></i>
+          <div>Đã giao hàng</div>
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+{/* Kết thúc thanh trạng thái */}
+
                       </div>
                     </div>
                     {item.orderDetail &&

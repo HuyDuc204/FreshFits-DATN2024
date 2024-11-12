@@ -177,8 +177,7 @@ function OrderHomePage(props) {
         total = parseFloat((total / EXCHANGE_RATES.USD).toFixed(2));
 
         if (activeTypeOnlPayment === 1) {
-         
-                    history.push({
+          history.push({
             pathname: "/payment/vnpay",
             orderData: {
               orderdate: Date.now(),
@@ -196,7 +195,7 @@ function OrderHomePage(props) {
             },
           });
         } else {
- toast.error("Vui lòng chọn phương thức thanh toán");
+          toast.error("Vui lòng chọn phương thức thanh toán");
         }
       }
     }
@@ -393,7 +392,7 @@ function OrderHomePage(props) {
                       src={storeVoucherLogo}
                     ></img>
                     <span className="name-easier">Easier voucher</span>
-                    {/* <span
+                   <span
                       onClick={() => handleOpenModal()}
                       className="choose-voucher"
                     >
@@ -403,9 +402,9 @@ function OrderHomePage(props) {
                       <span className="choose-voucher">
                         Mã voucher: {dataVoucher.voucherData.codeVoucher}
                       </span>
-                    )} */}
+                    )} 
 
-                    <span className="choose-voucher">Chọn Mã</span>
+                  
                   </div>
                   <div className="wrap-note">
                     <span>Lời Nhắn:</span>
@@ -462,18 +461,22 @@ function OrderHomePage(props) {
                 Thanh toán khi nhận hàng
               </div>
             </div>
-      
           </div>
 
-          <div className="content-bottom">
+          <div className="content-bottom fw-bold">
             <div className="wrap-bottom">
-              <div className="box-flex">
-                <div className="head">Tổng tiền hàng</div>
+              <div className="box-flex border-bottom pb-2">
+                <div className="head">Tổng tiền hàng:</div>
                 <div>{CommonUtils.formatter.format(price)} VNĐ</div>
               </div>
-              <div className="box-flex">
-                <div className="head">Tổng giảm giá</div>
-                <div>
+          
+              <div className="box-flex border-bottom pb-2">
+                <div className="head">Phí vận chuyển:</div>
+                <div>{CommonUtils.formatter.format(priceShip)} VNĐ</div>
+              </div>
+              <div className="box-flex border-bottom pb-2">
+                <div className="head">Tổng giảm giá:</div>
+                <div>- {" "}
                   {dataVoucher && dataVoucher.voucherData
                     ? CommonUtils.formatter.format(
                         price - totalPriceDiscount(price, dataVoucher)
@@ -481,15 +484,10 @@ function OrderHomePage(props) {
                     : CommonUtils.formatter.format(0)} VNĐ
                 </div>
               </div>
-              <div className="box-flex">
-                <div className="head">Phí vận chuyển</div>
-                <div>{CommonUtils.formatter.format(priceShip)} VNĐ</div>
-              </div>
-
-              <div className="box-flex">
+              <div className="box-flex border-bottom pb-2 ">
                 <div className="head">Tổng thanh toán:</div>
                 <div className="money">
-                  
+                
                   {dataVoucher && dataVoucher.voucherData
                     ? CommonUtils.formatter.format(
                         totalPriceDiscount(price, dataVoucher) + priceShip

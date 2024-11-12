@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useHistory, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import {
+  Progress,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "reactstrap";
 import {
   getDetailOrder,
   updateStatusOrderService,
@@ -20,6 +27,8 @@ function DetailOrder(props) {
   const [isOpen, setisOpen] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(""); // Thêm state lưu trạng thái đã chọn
+
   let price = 0;
   const [priceShip, setpriceShip] = useState(0);
   useEffect(() => {
@@ -92,7 +101,7 @@ function DetailOrder(props) {
       toast.success("Đã giao hàng thành công");
       loadDataOrder();
 
-      // Thiết lập delay 1 phút (60 giây) để thay đổi trạng thái
+      //
       setTimeout(async () => {
         let updatedRes = await updateStatusOrderService({
           id: DataOrder.id,
@@ -206,12 +215,12 @@ function DetailOrder(props) {
                 <div>
                   {DataOrder && DataOrder.typeShipData && (
                     <label className="form-check-label">
-                      {DataOrder.typeShipData.type} -{" "}
+                      {DataOrder.typeShipData.type}: {" "}
                       {CommonUtils.formatter.format(
                         DataOrder.typeShipData.price
                       )}{" "}
                     </label>
-                  )}
+                  )} VNĐ
                 </div>
               </div>
               <div className="box-shopcart-bottom">
@@ -242,7 +251,7 @@ function DetailOrder(props) {
                   </div>
                 </div>
 
-                <div className="content-right">
+                <div className="content-right fw-bold">
                   <div className="wrap-price">
                     <span className="text-total">
                       Tổng thanh toán{" "}
@@ -257,7 +266,7 @@ function DetailOrder(props) {
                             totalPriceDiscount(price, DataOrder.voucherData) +
                               priceShip
                           )
-                        : CommonUtils.formatter.format(price + +priceShip)}
+                        : CommonUtils.formatter.format(price + +priceShip)} VNĐ
                     </span>
                   </div>
                 </div>
@@ -302,6 +311,57 @@ function DetailOrder(props) {
                   {DataOrder.statusOrderData && DataOrder.statusOrderData.value}
                 </span>
               </b>
+
+              {/* Thêm thanh trạng thái giao hàng tại đây */}
+              <div className="delivery-status mt-4">
+                <div className="text-center">
+                  {/* Chờ lấy hàng */}
+                  {DataOrder.statusId === "S4" && (
+                    <div className="status-item">
+                      <Progress value={20} className="mt-2" color="warning" />
+                      <div className="mt-2 text-warning">
+                        <i className="fas fa-clock"></i>
+                        <div>Chờ lấy hàng</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Chờ xác nhận */}
+                  {DataOrder.statusId === "S3" && (
+                    <div className="status-item">
+                      <Progress value={40} className="mt-2" color="info" />
+                      <div className="mt-2 text-info">
+                        <i className="fas fa-check-circle"></i>
+                        <div>Chờ xác nhận</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Đang giao hàng */}
+                  {DataOrder.statusId === "S5" && (
+                    <div className="status-item">
+                      <Progress value={60} className="mt-2" color="primary" />
+                      <div className="mt-2 text-primary">
+                        <i className="fas fa-truck"></i>
+                        <div>Đang giao hàng</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Đã giao hàng */}
+                  {(DataOrder.statusId === "S8" ||
+                    DataOrder.statusId === "S6") && (
+                    <div className="status-item">
+                      <Progress value={100} className="mt-2" color="success" />
+                      <div className="mt-2 text-success">
+                        <i className="fas fa-check-circle"></i>
+                        <div>Đã giao hàng</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* Kết thúc thanh trạng thái */}
             </div>
           </div>
           <div className="content-top" style={{ display: "flex", gap: "10px" }}>
@@ -316,45 +376,47 @@ function DetailOrder(props) {
               }}
             ></div>
           </div>
-          <div className="content-bottom">
+          <div className="content-bottom fw-bold">
             {DataOrder && DataOrder.addressUser && (
               <div className="wrap-bottom">
-                <div className="box-flex">
-                  <div className="head">Tên khách hàng</div>
+                <div className="box-flex border-bottom pb-2">
+                  <div className="head">Tên khách hàng:</div>
                   <div>{DataOrder.addressUser.shipName}</div>
                 </div>
-                <div className="box-flex">
-                  <div className="head">Số điện thoại</div>
+                <div className="box-flex border-bottom pb-2">
+                  <div className="head">Số điện thoại:</div>
                   <div>{DataOrder.addressUser.shipPhonenumber}</div>
                 </div>
-                <div className="box-flex">
-                  <div className="head">Địa chỉ email</div>
+                <div className="box-flex border-bottom pb-2">
+                  <div className="head">Địa chỉ email:</div>
                   <div>{DataOrder.addressUser.shipEmail}</div>
                 </div>
               </div>
             )}
 
-            <div className="wrap-bottom">
-              <div className="box-flex">
-                <div className="head">Tổng tiền hàng</div>
-                <div>{CommonUtils.formatter.format(price)}</div>
+            <div className="wrap-bottom fw-bold">
+              <div className="box-flex border-bottom pb-2">
+                <div className="head">Tổng tiền hàng:</div>
+                <div>{CommonUtils.formatter.format(price)} VNĐ</div>
               </div>
-              <div className="box-flex">
-                <div className="head">Tổng giảm giá</div>
+
+              <div className="box-flex border-bottom pb-2">
+                <div className="head">Phí vận chuyển:</div>
+                <div>{CommonUtils.formatter.format(priceShip)} VNĐ</div>
+              </div>
+              <div className="box-flex border-bottom pb-2">
+                <div className="head">Tổng giảm giá:</div>
                 <div>
+                  -{" "}
                   {DataOrder && DataOrder.voucherData && DataOrder.voucherId
                     ? CommonUtils.formatter.format(
                         price - totalPriceDiscount(price, DataOrder.voucherData)
                       )
-                    : CommonUtils.formatter.format(0)}
+                    : CommonUtils.formatter.format(0)}{" "}
+                  VNĐ
                 </div>
               </div>
-              <div className="box-flex">
-                <div className="head">Phí vận chuyển</div>
-                <div>{CommonUtils.formatter.format(priceShip)}</div>
-              </div>
-
-              <div className="box-flex">
+              <div className="box-flex border-bottom pb-2">
                 <div className="head">Tổng thanh toán:</div>
                 <div className="money">
                   {DataOrder && DataOrder.voucherData && DataOrder.voucherId
@@ -362,7 +424,8 @@ function DetailOrder(props) {
                         totalPriceDiscount(price, DataOrder.voucherData) +
                           priceShip
                       )
-                    : CommonUtils.formatter.format(price + +priceShip)}
+                    : CommonUtils.formatter.format(price + +priceShip)}{" "}
+                  VNĐ
                 </div>
               </div>
               <div className="box-flex">
