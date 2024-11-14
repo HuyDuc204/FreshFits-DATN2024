@@ -162,7 +162,7 @@ const Home = () => {
   return (
     <div className="container-fluid px-4">
       <h1 className="mt-4">THỐNG KÊ</h1>
-      <ol className="breadcrumb mb-4">
+      <ol className="breadcrumb mb-4 p-4">
         <li className="breadcrumb-item active">Trang thống kê</li>
       </ol>
       <div className="row">
@@ -184,7 +184,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="col-xl-3 col-md-6">
+        {/* <div className="col-xl-3 col-md-6">
           <div className="card bg-warning text-white mb-4">
             <div className="card-body">ĐÁNH GIÁ ({CountCard.countReview})</div>
             <div className="card-footer d-flex align-items-center justify-content-between">
@@ -196,8 +196,8 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="col-xl-3 col-md-6">
+        </div> */}
+        {/* <div className="col-xl-3 col-md-6">
           <div className="card bg-success text-white mb-4">
             <div className="card-body">SẢN PHẨM ({CountCard.countProduct})</div>
             <div className="card-footer d-flex align-items-center justify-content-between">
@@ -212,8 +212,8 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="col-xl-3 col-md-6">
+        </div> */}
+        {/* <div className="col-xl-3 col-md-6">
           <div className="card bg-danger text-white mb-4">
             <div className="card-body">THÀNH VIÊN ({CountCard.countUser})</div>
             <div className="card-footer d-flex align-items-center justify-content-between">
@@ -228,7 +228,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="row">
         <div className="col-md-8">
@@ -345,5 +345,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;
