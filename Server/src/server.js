@@ -1,17 +1,13 @@
 import express from "express";
+import bodyParser from "body-parser";
 import viewEngine from "./config/viewEngine";
 import initwebRoutes from "./route/web";
-import bodyParser from "body-parser";
-
 import connectDB from "./config/connectDB";
 import http from "http";
-
 import { sendMessage } from "./services/messageService";
 require("dotenv").config();
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 let app = express();
-
-// Cài đặt CORS với thư viện cors
 
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
