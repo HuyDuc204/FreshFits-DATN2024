@@ -23,6 +23,7 @@ import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import "./Home.scss";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -162,7 +163,7 @@ const Home = () => {
   return (
     <div className="container-fluid px-4">
       <h1 className="mt-4">THỐNG KÊ</h1>
-      <ol className="breadcrumb mb-4 p-4">
+      <ol className="breadcrumb mb-4">
         <li className="breadcrumb-item active">Trang thống kê</li>
       </ol>
       <div className="row">
@@ -184,20 +185,8 @@ const Home = () => {
             </div>
           </div>
         </div>
-        {/* <div className="col-xl-3 col-md-6">
-          <div className="card bg-warning text-white mb-4">
-            <div className="card-body">ĐÁNH GIÁ ({CountCard.countReview})</div>
-            <div className="card-footer d-flex align-items-center justify-content-between">
-              <a className="small text-white stretched-link" href="#">
-                Chi tiết
-              </a>
-              <div className="small text-white">
-                <i className="fas fa-angle-right" />
-              </div>
-            </div>
-          </div>
-        </div> */}
-        {/* <div className="col-xl-3 col-md-6">
+
+        <div className="col-xl-3 col-md-6">
           <div className="card bg-success text-white mb-4">
             <div className="card-body">SẢN PHẨM ({CountCard.countProduct})</div>
             <div className="card-footer d-flex align-items-center justify-content-between">
@@ -212,8 +201,8 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div> */}
-        {/* <div className="col-xl-3 col-md-6">
+        </div>
+        <div className="col-xl-3 col-md-6">
           <div className="card bg-danger text-white mb-4">
             <div className="card-body">THÀNH VIÊN ({CountCard.countUser})</div>
             <div className="card-footer d-flex align-items-center justify-content-between">
@@ -228,8 +217,39 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
+      <div className="row">
+        <div className="col-sm-11">
+          <label>Chọn tháng</label>
+          <DatePicker
+            selected={month}
+            onChange={(date) => handleOnChangeDatePickerFromDate(date)}
+            dateFormat="MM/yyyy"
+            showMonthYearPicker
+            className="form-control col-md-2"
+          />
+         <Bar
+  options={{
+    ...getOptions("Biểu đồ doanh thu theo từng ngày trong tháng"),
+    plugins: {
+      title: {
+        display: true,
+        text: "Biểu đồ doanh thu theo từng ngày trong tháng",
+        font: {
+          size: 24, // Thay đổi kích thước chữ tại đây
+          weight: 'bold', // Cân nặng của chữ (đậm)
+          family: 'Arial', // Font chữ
+        },
+      },
+    },
+  }}
+  data={dataBar}
+/>
+
+        </div>
+      </div>
+
       <div className="row">
         <div className="col-md-8">
           <label>Chọn năm</label>
@@ -240,10 +260,25 @@ const Home = () => {
             showYearPicker
             className="form-control col-md-2"
           />
-          <Line
-            options={getOptions("Biểu đồ doanh thu theo từng tháng trong năm")}
-            data={dataLine}
-          />
+        <Line
+ 
+  options={{
+    ...getOptions("Biểu đồ doanh thu theo từng tháng trong năm"),
+    plugins: {
+      title: {
+        display: true,
+        text: "Biểu đồ doanh thu theo từng tháng trong năm",
+        font: {
+          size: 24, // Thay đổi kích thước chữ tại đây
+          weight: 'bold', // Cân nặng của chữ (đậm)
+          family: 'Arial', // Font chữ
+        },
+      },
+    },
+  }}
+  data={dataLine}
+/>
+
         </div>
         <div className="col-md-4">
           <form>
@@ -324,22 +359,6 @@ const Home = () => {
             options={getOptions("Thống kê trạng thái đơn hàng")}
           />
           ;
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-sm-11">
-          <label>Chọn tháng</label>
-          <DatePicker
-            selected={month}
-            onChange={(date) => handleOnChangeDatePickerFromDate(date)}
-            dateFormat="MM/yyyy"
-            showMonthYearPicker
-            className="form-control col-md-2"
-          />
-          <Bar
-            options={getOptions("Biểu đồ doanh thu theo từng ngày trong tháng")}
-            data={dataBar}
-          />
         </div>
       </div>
     </div>
