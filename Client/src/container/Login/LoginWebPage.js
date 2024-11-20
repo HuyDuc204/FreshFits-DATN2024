@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "./LoginWebPage.css";
@@ -15,7 +16,7 @@ const LoginWebPage = () => {
     phonenumber: "",
   });
   
-  const [isRegistering, setIsRegistering] = useState(false); 
+  const [isRegistering, setIsRegistering] = useState(false); // State to toggle between login and register
 
   const handleOnChange = (event) => {
     const { name, value } = event.target;
@@ -23,12 +24,22 @@ const LoginWebPage = () => {
   };
 
   const handleLogin = async () => {
+    if (inputValues.password.length < 6) {
+      toast.error("Mật khẩu phải có ít nhất 6 ký tự.");
+      return;
+    }
+    if (/[!@#$%^&*()_+|~=`{}\[\]:;"'<>,.?/\\-]/.test(inputValues.password)) {
+      toast.error("Mật khẩu không được chứa các ký tự đặc biệt.");
+      return;
+    }
+
     let res = await handleLoginService({
       email: inputValues.email,
       password: inputValues.password,
     });
 
     if (res && res.errCode === 0) {
+      toast.success("Đăng nhập thành công!");
       localStorage.setItem("userData", JSON.stringify(res.user));
       localStorage.setItem("token", JSON.stringify(res.accessToken));
       if (res.user.roleId === "R1" || res.user.roleId === "R4") {
@@ -42,6 +53,15 @@ const LoginWebPage = () => {
   };
 
   const handleSaveUser = async () => {
+    if (inputValues.password.length < 6) {
+      toast.error("Mật khẩu phải có ít nhất 6 ký tự.");
+      return;
+    }
+    if (/[!@#$%^&*()_+|~=`{}\[\]:;"'<>,.?/\\-]/.test(inputValues.password)) {
+      toast.error("Mật khẩu không được chứa các ký tự đặc biệt.");
+      return;
+    }
+  
     let res = await checkPhonenumberEmail({
       phonenumber: inputValues.phonenumber,
       email: inputValues.email,
@@ -193,4 +213,5 @@ const LoginWebPage = () => {
     </div>
   );
 };
+
 export default LoginWebPage;
