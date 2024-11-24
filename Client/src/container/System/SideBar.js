@@ -76,7 +76,7 @@ const menuItems = [
     roleId: "R1",
     submenu: [
       { title: "Danh sách loại giao hàng", path: "/admin/list-typeship" },
-      { title: "Thêm loại giao hàng", path: "/admin/add-typeship" },
+      // { title: "Thêm loại giao hàng", path: "/admin/add-typeship" },
     ],
   },
   {
@@ -84,10 +84,10 @@ const menuItems = [
     icon: "fas fa-percentage",
     roleId: "R1",
     submenu: [
-      // { title: "Danh sách loại khuyến mãi", path: "/admin/list-typevoucher" },
-      // { title: "Danh sách mã khuyến mãi", path: "/admin/list-voucher" },
-      // { title: "Thêm loại khuyến mãi", path: "/admin/add-typevoucher" },
-      { title: "Thêm mã khuyến mãi", path: "#" },
+      { title: "Danh sách loại khuyến mãi", path: "/admin/list-typevoucher" },
+      { title: "Danh sách mã khuyến mãi", path: "/admin/list-voucher" },
+      { title: "Thêm loại khuyến mãi", path: "/admin/add-typevoucher" },
+      { title: "Thêm mã khuyến mãi", path: "/admin/add-voucher" },
     ],
   },
   {
@@ -126,7 +126,7 @@ const menuItems = [
       { title: "Thống kê tồn kho", path: "/admin/stock-product" },
     ],
   },
-];  
+];
 
 const SideBar = () => {
   const [user, setUser] = useState({});

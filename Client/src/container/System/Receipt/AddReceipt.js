@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { createNewReceiptService, getAllSupplier, getAllProductAdmin } from '../../../services/userService';
+import { createNewReceiptService,getAllSupplier,getAllProductAdmin } from '../../../services/userService';
 
 import { toast } from 'react-toastify';
 import { useParams } from "react-router-dom";
@@ -15,9 +15,9 @@ const AddReceipt = (props) => {
     const [dataProductDetailSize, setdataProductDetailSize] = useState([])
     const [productDetailSizeId, setproductDetailSizeId] = useState('')
     const [inputValues, setInputValues] = useState({
-        supplierId: '', quantity: '', price: '', productId: ''
+        supplierId: '',quantity:'',price:'',productId:''
     });
-    if (dataSupplier && dataSupplier.length > 0 && inputValues.supplierId === '' && dataProduct && dataProduct.length > 0 && inputValues.productId === '') {
+    if (dataSupplier && dataSupplier.length > 0 && inputValues.supplierId === '' && dataProduct && dataProduct.length > 0 && inputValues.productId === '' ) {
 
         setInputValues({ ...inputValues, ["supplierId"]: dataSupplier[0].id, })
         setdataProductDetail(dataProduct[0].productDetail)
@@ -33,15 +33,15 @@ const AddReceipt = (props) => {
     let loadDataSupplier = async () => {
         let arrData = await getAllSupplier({
 
-
+           
             limit: '',
             offset: '',
-            keyword: ''
+            keyword:''
 
         })
         if (arrData && arrData.errCode === 0) {
             setdataSupplier(arrData.data)
-
+            
         }
     }
     let loadProduct = async () => {
@@ -53,25 +53,33 @@ const AddReceipt = (props) => {
             brandId: 'ALL',
             limit: '',
             offset: '',
-            keyword: ''
+            keyword:''
 
         })
         if (arrData && arrData.errCode === 0) {
             setdataProduct(arrData.data)
-
+           
         }
     }
+     /////////////////
+  const [errors, setErrors] = useState({});
+  const validateField = (name, value) => {
+    let error = "";
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+  };
+  ///////////////
     const handleOnChange = event => {
         const { name, value } = event.target;
         setInputValues({ ...inputValues, [name]: value });
+   validateField(name, value); // Gọi hàm validate cho từng trường
 
     };
     const handleOnChangeProduct = event => {
         const { name, value } = event.target;
-        setInputValues({ ...inputValues, [name]: value })
-        for (let i = 0; i < dataProduct.length; i++) {
-            if (dataProduct[i].id == value) {
-
+        setInputValues({ ...inputValues, [name]: value})
+        for(let i=0;i<dataProduct.length;i++){
+            if(dataProduct[i].id==value){
+             
                 setdataProductDetail(dataProduct[i].productDetail)
                 setdataProductDetailSize(dataProduct[i].productDetail[0].productDetailSize)
                 setproductDetailSizeId(dataProduct[i].productDetail[0].productDetailSize[0].id)
@@ -79,11 +87,11 @@ const AddReceipt = (props) => {
         }
 
     };
-    let handleOnChangeProductDetail = event => {
+    let handleOnChangeProductDetail = event =>{
         const { name, value } = event.target;
-        for (let i = 0; i < dataProductDetail.length; i++) {
-            if (dataProductDetail[i].id == value) {
-
+        for(let i=0;i<dataProductDetail.length;i++){
+            if(dataProductDetail[i].id==value){
+             
                 setdataProductDetailSize(dataProductDetail[i].productDetailSize)
                 setproductDetailSizeId(dataProductDetail[i].productDetailSize[0].id)
             }
@@ -91,27 +99,53 @@ const AddReceipt = (props) => {
     }
     let handleSaveReceipt = async () => {
 
-        let res = await createNewReceiptService({
-            supplierId: inputValues.supplierId,
-            userId: user.id,
-            productDetailSizeId: productDetailSizeId,
-            quantity: inputValues.quantity,
-            price: inputValues.price
-        })
-        if (res && res.errCode === 0) {
-            toast.success("Thêm nhập hàng thành công")
-            setInputValues({
-                ...inputValues,
+        // Kiểm tra lỗi trước khi gửi dữ liệu
+ const requiredFields = [
+    "quantity",
+    "price",
+ 
+ 
+  ];
+  let hasError = false;
+  requiredFields.forEach((field) => {
+    validateField(field, inputValues[field]);
+    if (!inputValues[field]) hasError = true;
+  });
 
-                ["quantity"]: '',
-                ["price"]: ''
+  if (hasError) {
+    toast.error("Vui lòng điền đầy đủ thông tin.");
+    return;
+  }
+  if (inputValues.quantity <= 0) {
+    toast.error("số lượng phải lớn hơn 0.");
+    return;
+  }
+  if (inputValues.price <= 0) {
+    toast.error("Đơn giá phải lớn hơn 0.");
+    return;
+  }
+      //////////////////////////
+            let res = await createNewReceiptService({
+                supplierId:inputValues.supplierId,
+                userId:user.id,
+                productDetailSizeId:productDetailSizeId,
+                quantity:inputValues.quantity,
+                price:inputValues.price
             })
-        }
-        else if (res && res.errCode === 2) {
-            toast.error(res.errMessage)
-        }
-        else toast.error("Thêm nhập hàng thất bại")
-
+            if (res && res.errCode === 0) {
+                toast.success("Thêm nhập hàng thành công")
+                setInputValues({
+                    ...inputValues,
+                  
+                    ["quantity"]: '',
+                    ["price"]: ''
+                })
+            }
+            else if (res && res.errCode === 2) {
+                toast.error(res.errMessage)
+            }
+            else toast.error("Thêm nhập hàng thất bại")
+       
     }
 
 
@@ -123,12 +157,12 @@ const AddReceipt = (props) => {
             <div className="card mb-4">
                 <div className="card-header">
                     <i className="fas fa-table me-1" />
-                    Thêm mới nhập hàng
+                  Thêm mới nhập hàng
                 </div>
                 <div className="card-body">
                     <form>
                         <div className="form-row">
-                            <div className="form-group col-md-4">
+                        <div className="form-group col-md-4">
                                 <label htmlFor="inputEmail4">Nhà cung cấp</label>
                                 <select value={inputValues.supplierId} name="supplierId" onChange={(event) => handleOnChange(event)} id="inputState" className="form-control">
                                     {dataSupplier && dataSupplier.length > 0 &&
@@ -139,12 +173,12 @@ const AddReceipt = (props) => {
                                         })
                                     }
                                 </select>
-                            </div>
+                        </div>
                         </div>
                         <div className="form-row">
-                            <div className="form-group col-md-4">
+                        <div className="form-group col-md-4">
                                 <label htmlFor="inputEmail4">Sản phẩm</label>
-                                <select value={inputValues.productId} name="productId" onChange={(event) => handleOnChangeProduct(event)} id="inputState" className="form-control">
+                                <select  value={inputValues.productId} name="productId" onChange={(event) => handleOnChangeProduct(event)} id="inputState" className="form-control">
                                     {dataProduct && dataProduct.length > 0 &&
                                         dataProduct.map((item, index) => {
                                             return (
@@ -153,10 +187,10 @@ const AddReceipt = (props) => {
                                         })
                                     }
                                 </select>
-                            </div>
-                            <div className="form-group col-md-4">
+                        </div>
+                        <div className="form-group col-md-4">
                                 <label htmlFor="inputEmail4">Loại sản phẩm</label>
-                                <select onChange={(event) => handleOnChangeProductDetail(event)} id="inputState" className="form-control">
+                                <select  onChange={(event) => handleOnChangeProductDetail(event)} id="inputState" className="form-control">
                                     {dataProductDetail && dataProductDetail.length > 0 &&
                                         dataProductDetail.map((item, index) => {
                                             return (
@@ -165,10 +199,10 @@ const AddReceipt = (props) => {
                                         })
                                     }
                                 </select>
-                            </div>
-                            <div className="form-group col-md-4">
+                        </div>
+                        <div className="form-group col-md-4">
                                 <label htmlFor="inputEmail4">Size sản phẩm</label>
-                                <select value={productDetailSizeId} name="productDetailSizeId" onChange={(event) => setproductDetailSizeId(event.target.value)} id="inputState" className="form-control">
+                                <select  value={productDetailSizeId} name="productDetailSizeId" onChange={(event) => setproductDetailSizeId(event.target.value)} id="inputState" className="form-control">
                                     {dataProductDetailSize && dataProductDetailSize.length > 0 &&
                                         dataProductDetailSize.map((item, index) => {
                                             return (
@@ -177,8 +211,8 @@ const AddReceipt = (props) => {
                                         })
                                     }
                                 </select>
-                            </div>
-                            <div className="form-group col-md-6">
+                        </div>
+                        <div className="form-group col-md-6">
                                 <label htmlFor="inputEmail4">Số lượng</label>
                                 <input type="number" value={inputValues.quantity} name="quantity" onChange={(event) => handleOnChange(event)} className="form-control" id="inputEmail4" />
                             </div>
@@ -187,7 +221,7 @@ const AddReceipt = (props) => {
                                 <input type="number" value={inputValues.price} name="price" onChange={(event) => handleOnChange(event)} className="form-control" id="inputEmail4" />
                             </div>
                         </div>
-
+                       
                         <button type="button" onClick={() => handleSaveReceipt()} className="btn btn-primary">Lưu thông tin</button>
                     </form>
                 </div>
@@ -196,4 +230,3 @@ const AddReceipt = (props) => {
     )
 }
 export default AddReceipt;
-//Nhi add Nhap hang

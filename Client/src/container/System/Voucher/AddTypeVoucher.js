@@ -75,7 +75,7 @@ const validateInputValues = () => {
 
     // Kiểm tra giá trị giảm giá phải giống giá trị loại voucher
     if (inputValues.maxValue !== inputValues.value) {
-        toast.error("Giảm giá phải giống giá trị loại voucher");
+        toast.error("Giảm giá phải giống (Tên giá trị voucher)");
         return false;
     }
 
@@ -167,7 +167,7 @@ const validateInputValues = () => {
                                 </select>
                             </div>
                             <div className="form-group col-md-6">
-                                <label htmlFor="inputPassword4">Giá trị loại voucher (VNĐ)</label>
+                                <label htmlFor="inputPassword4">Tên giá trị voucher (VNĐ)</label>
                                 <input type="text" value={inputValues.value} name="value" onChange={(event) => handleOnChange(event)} className="form-control" id="inputPassword4" />
                             </div>
                             <div className="form-group col-md-6">
@@ -175,7 +175,7 @@ const validateInputValues = () => {
                                 <input type="number" value={inputValues.minValue} name="minValue" onChange={(event) => handleOnChange(event)} className="form-control" id="inputEmail4" />
                             </div>
                             <div className="form-group col-md-6">
-                                <label htmlFor="inputPassword4">Giảm giá (Giá trị loại Voucher)</label>
+                                <label htmlFor="inputPassword4">Giảm giá </label>
                                 <input type="number" value={inputValues.maxValue} name="maxValue" onChange={(event) => handleOnChange(event)} className="form-control" id="inputPassword4" />
                             </div>
                         </div>

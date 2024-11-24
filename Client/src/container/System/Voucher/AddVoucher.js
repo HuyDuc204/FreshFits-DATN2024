@@ -138,7 +138,7 @@ const AddVoucher = (props) => {
     // Kiểm tra tên mã voucher theo định dạng "MAGIAM???K"
     const codeRegex = /^GIAM\d+K$/;
     if (!codeRegex.test(inputValues.codeVoucher)) {
-      toast.error("Tên mã voucher phải theo loại voucher  (ví dụ: GIAM500K).");
+      toast.error("Tên mã voucher phải theo loại voucher  (ví dụ: 500000 là GIAM500K).");
       return;
     }
 
@@ -248,7 +248,7 @@ const AddVoucher = (props) => {
               </div>
               <div className="form-group col-md-4">
                 <label htmlFor="inputPassword4">
-                  Tên mã voucher (GIAM???K)
+                  Tên mã  theo loại voucher(GIAM???K)
                 </label>
 
                 <input
