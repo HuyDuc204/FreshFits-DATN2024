@@ -46,9 +46,17 @@ const AddImageModal = (props) => {
         }
     }, [props.isOpenModal]);
 
+       /////////////////
+  const [errors, setErrors] = useState({});
+  const validateField = (name, value) => {
+    let error = "";
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+  };
+  ///////////////
     const handleOnChange = (event) => {
         const { name, value } = event.target;
         setInputValues({ ...inputValues, [name]: value });
+  validateField(name, value); // Gọi hàm validate cho từng trường
     };
 
     let handleOnChangeImage = async (event) => {
@@ -72,6 +80,25 @@ const AddImageModal = (props) => {
         setInputValues({ ...inputValues, ["isOpen"]: true });
     };
     let HandleSendDataFromModal = () => {
+
+ // Kiểm tra lỗi trước khi gửi dữ liệu
+ const requiredFields = [
+  
+    "imageReview",
+  ];
+  let hasError = false;
+  requiredFields.forEach((field) => {
+    validateField(field, inputValues[field]);
+    if (!inputValues[field]) hasError = true;
+  });
+
+  if (hasError) {
+    toast.error("Vui lòng điền đầy đủ thông tin.");
+    return;
+  }
+
+  /////////////////////////////////////////////
+
         props.sendDataFromModal({
             image: inputValues.image,
             caption: inputValues.caption,
