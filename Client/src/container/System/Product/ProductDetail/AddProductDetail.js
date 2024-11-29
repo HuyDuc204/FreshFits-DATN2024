@@ -10,263 +10,314 @@ import "react-image-lightbox/style.css";
 import { useFetchAllcode } from "../../../customize/fetch";
 import { CreateNewProductDetailService } from "../../../../services/userService";
 const AddProductDetail = (props) => {
-    const { data: dataSize } = useFetchAllcode("SIZE");
-    const { id } = useParams();
-    const [inputValues, setInputValues] = useState({
-        width: "",
-        height: "",
-        sizeId: "",
-        originalPrice: "",
-        discountPrice: "",
-        image: "",
-        imageReview: "",
-        isOpen: false,
-        nameDetail: "",
-        description: "",
-        weight: "",
+  const { data: dataSize } = useFetchAllcode("SIZE");
+  const { id } = useParams();
+  const [inputValues, setInputValues] = useState({
+    width: "",
+    height: "",
+    sizeId: "",
+    originalPrice: "",
+    discountPrice: "",
+    image: "",
+    imageReview: "",
+    isOpen: false,
+    nameDetail: "",
+    description: "",
+    weight: "",
+  });
+
+  if (dataSize && dataSize.length > 0 && inputValues.sizeId === "") {
+    setInputValues({ ...inputValues, ["sizeId"]: dataSize[0].code });
+  }
+  /////////////////
+  const [errors, setErrors] = useState({});
+  const validateField = (name, value) => {
+    let error = "";
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+  };
+  ///////////////
+  const handleOnChange = (event) => {
+    const { name, value } = event.target;
+    setInputValues({ ...inputValues, [name]: value });
+    validateField(name, value); // Gọi hàm validate cho từng trường
+  };
+
+  let handleOnChangeImage = async (event) => {
+    let data = event.target.files;
+    let file = data[0];
+    if (file?.size > 31312281) {
+      toast.error("Dung lượng file bé hơn 30mb");
+    } else {
+      let base64 = await CommonUtils.getBase64(file);
+      let objectUrl = URL.createObjectURL(file);
+      setInputValues({
+        ...inputValues,
+        ["image"]: base64,
+        ["imageReview"]: objectUrl,
+      });
+    }
+  };
+  let openPreviewImage = () => {
+    if (!inputValues.imageReview) return;
+
+    setInputValues({ ...inputValues, ["isOpen"]: true });
+  };
+  let handleSaveProductDetail = async () => {
+    // Kiểm tra lỗi trước khi gửi dữ liệu
+    const requiredFields = [
+      "width",
+      "height",
+      "originalPrice",
+      "weight",
+      "nameDetail",
+      "discountPrice",
+      "imageReview",
+    ];
+    let hasError = false;
+    requiredFields.forEach((field) => {
+      validateField(field, inputValues[field]);
+      if (!inputValues[field]) hasError = true;
     });
 
-    if (dataSize && dataSize.length > 0 && inputValues.sizeId === "") {
-        setInputValues({ ...inputValues, ["sizeId"]: dataSize[0].code });
+    if (hasError) {
+      toast.error("Vui lòng điền đầy đủ thông tin.");
+      return;
     }
-    const handleOnChange = (event) => {
-        const { name, value } = event.target;
-        setInputValues({ ...inputValues, [name]: value });
-    };
+    if (inputValues.width <= 0) {
+      toast.error("Chiều rộng lớn hơn 0.");
+      return;
+    }
+    if (inputValues.height <= 0) {
+      toast.error("Chiều dài lớn hơn 0.");
+      return;
+    }
+    // Kiểm tra giá trị bổ sung nếu cần
+    if (inputValues.originalPrice <= 0) {
+      toast.error("Giá gốc phải lớn hơn 0.");
+      return;
+    }
+    if (inputValues.discountPrice <= 0) {
+      toast.error("Giá Khuyến mãi phải lớn hơn 0.");
+      return;
+    }
+    if (inputValues.discountPrice >= inputValues.originalPrice) {
+      toast.error("Giá giảm phải nhỏ hơn giá gốc");
+      return;
+    }
 
-    let handleOnChangeImage = async (event) => {
-        let data = event.target.files;
-        let file = data[0];
-        if (file?.size > 31312281) {
-            toast.error("Dung lượng file bé hơn 30mb");
-        } else {
-            let base64 = await CommonUtils.getBase64(file);
-            let objectUrl = URL.createObjectURL(file);
-            setInputValues({
-                ...inputValues,
-                ["image"]: base64,
-                ["imageReview"]: objectUrl,
-            });
-        }
-    };
-    let openPreviewImage = () => {
-        if (!inputValues.imageReview) return;
+    if (inputValues.weight <= 0) {
+      toast.error("Số lượng phải lớn hơn 0.");
+      return;
+    }
 
-        setInputValues({ ...inputValues, ["isOpen"]: true });
-    };
-    let handleSaveProductDetail = async () => {
-        let res = await CreateNewProductDetailService({
-            id: id,
-            width: inputValues.width,
-            height: inputValues.height,
-            description: inputValues.description,
-            sizeId: inputValues.sizeId,
+    // Kiểm tra các trường số liệu có phải là số hợp lệ
+    if (
+      isNaN(inputValues.width) ||
+      isNaN(inputValues.height) ||
+      isNaN(inputValues.weight)
+    ) {
+      toast.error(
+        "Các trường chiều rộng, chiều cao, và trọng lượng phải là số hợp lệ."
+      );
+      return;
+    }
+    /////////////////////////////////////////////
 
-            originalPrice: inputValues.originalPrice,
-            discountPrice: inputValues.discountPrice,
-            image: inputValues.image,
-            nameDetail: inputValues.nameDetail,
-            weight: inputValues.weight,
-        });
-        if (res && res.errCode === 0) {
-            toast.success("Tạo mới loại sản phẩm thành công!");
-            setInputValues({
-                ...inputValues,
+    let res = await CreateNewProductDetailService({
+      id: id,
+      width: inputValues.width,
+      height: inputValues.height,
+      description: inputValues.description,
+      sizeId: inputValues.sizeId,
 
-                ["width"]: "",
-                ["height"]: "",
-                ["description"]: "",
-                ["sizeId"]: "",
+      originalPrice: inputValues.originalPrice,
+      discountPrice: inputValues.discountPrice,
+      image: inputValues.image,
+      nameDetail: inputValues.nameDetail,
+      weight: inputValues.weight,
+    });
+    if (res && res.errCode === 0) {
+      toast.success("Tạo mới loại sản phẩm thành công!");
+      setInputValues({
+        ...inputValues,
 
-                ["originalPrice"]: "",
-                ["discountPrice"]: "",
-                ["image"]: "",
-                ["imageReview"]: "",
-                ["nameDetail"]: "",
-                ["weight"]: "",
-            });
-        } else {
-            toast.error(res.errMessage);
-        }
-    };
-    return (
-        <div className="container-fluid px-4">
-            <h1 className="mt-4">Quản lý chi tiết sản phẩm</h1>
+        ["width"]: "",
+        ["height"]: "",
+        ["description"]: "",
+        ["sizeId"]: "",
 
-            <div className="card mb-4">
-                <div className="card-header">
-                    <i className="fas fa-table me-1" />
-                    Thêm mới chi tiết sản phẩm
-                </div>
-                <div className="card-body">
-                    <form>
-                        <div className="form-row">
-                            <div className="form-group col-md-4">
-                                <label htmlFor="inputEmail4">
-                                    Tên loại sản phẩm
-                                </label>
-                                <input
-                                    type="text"
-                                    value={inputValues.nameDetail}
-                                    name="nameDetail"
-                                    onChange={(event) => handleOnChange(event)}
-                                    className="form-control"
-                                    id="inputEmail4"
-                                />
-                            </div>
-                            <div className="form-group col-md-4">
-                                <label htmlFor="inputEmail4">Chiều rộng</label>
-                                <input
-                                    type="text"
-                                    value={inputValues.width}
-                                    name="width"
-                                    onChange={(event) => handleOnChange(event)}
-                                    className="form-control"
-                                    id="inputEmail4"
-                                />
-                            </div>
-                            <div className="form-group col-md-4">
-                                <label htmlFor="inputPassword4">
-                                    chiều dài
-                                </label>
-                                <input
-                                    type="text"
-                                    value={inputValues.height}
-                                    name="height"
-                                    onChange={(event) => handleOnChange(event)}
-                                    className="form-control"
-                                    id="inputPassword4"
-                                />
-                            </div>
-                            <div className="form-group col-md-3">
-                                <label htmlFor="inputEmail4">Giá gốc</label>
-                                <input
-                                    type="number"
-                                    value={inputValues.originalPrice}
-                                    name="originalPrice"
-                                    onChange={(event) => handleOnChange(event)}
-                                    className="form-control"
-                                    id="inputEmail4"
-                                />
-                            </div>
-                            <div className="form-group col-md-3">
-                                <label htmlFor="inputPassword4">
-                                    Giá khuyến mãi
-                                </label>
-                                <input
-                                    type="number"
-                                    value={inputValues.discountPrice}
-                                    name="discountPrice"
-                                    onChange={(event) => handleOnChange(event)}
-                                    className="form-control"
-                                    id="inputPassword4"
-                                />
-                            </div>
-                            <div className="form-group col-md-4">
-                                <label htmlFor="inputPassword4">
-                                    Khối lượng
-                                </label>
-                                <input
-                                    type="text"
-                                    value={inputValues.weight}
-                                    name="weight"
-                                    onChange={(event) => handleOnChange(event)}
-                                    className="form-control"
-                                    id="inputPassword4"
-                                />
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="inputAddress">Mô tả chi tiết</label>
-                            <textarea
-                                rows="4"
-                                value={inputValues.description}
-                                name="description"
-                                onChange={(event) => handleOnChange(event)}
-                                className="form-control"
-                            ></textarea>
-                        </div>
-                        <div className="form-row">
-                            <div className="form-group col-md-4">
-                                <label htmlFor="inputPassword4">
-                                    Kích thước
-                                </label>
-                                <select
-                                    value={inputValues.sizeId}
-                                    name="sizeId"
-                                    onChange={(event) => handleOnChange(event)}
-                                    id="inputState"
-                                    className="form-control"
-                                >
-                                    {dataSize &&
-                                        dataSize.length > 0 &&
-                                        dataSize.map((item, index) => {
-                                            return (
-                                                <option
-                                                    key={index}
-                                                    value={item.code}
-                                                >
-                                                    {item.value}
-                                                </option>
-                                            );
-                                        })}
-                                </select>
-                            </div>
-                            <div className="form-group col-md-3">
-                                <label htmlFor="inputPassword4">
-                                    Chọn hình ảnh
-                                </label>
-                                <input
-                                    type="file"
-                                    id="previewImg"
-                                    accept=".jpg,.png"
-                                    hidden
-                                    onChange={(event) =>
-                                        handleOnChangeImage(event)
-                                    }
-                                />
-                                <br></br>
-                                <label
-                                    style={{
-                                        backgroundColor: "#eee",
-                                        borderRadius: "5px",
-                                        padding: "6px",
-                                        cursor: "pointer",
-                                    }}
-                                    className="label-upload"
-                                    htmlFor="previewImg"
-                                >
-                                    Tải ảnh <i className="fas fa-upload"></i>
-                                </label>
-                                <div
-                                    style={{
-                                        backgroundImage: `url(${inputValues.imageReview})`,
-                                    }}
-                                    onClick={() => openPreviewImage()}
-                                    className="box-image"
-                                ></div>
-                            </div>
-                        </div>
+        ["originalPrice"]: "",
+        ["discountPrice"]: "",
+        ["image"]: "",
+        ["imageReview"]: "",
+        ["nameDetail"]: "",
+        ["weight"]: "",
+      });
+    } else {
+      toast.error(res.errMessage);
+    }
+  };
+  return (
+    <div className="container-fluid px-4">
+      <h1 className="mt-4">Quản lý chi tiết sản phẩm</h1>
 
-                        <button
-                            onClick={() => handleSaveProductDetail()}
-                            type="button"
-                            className="btn btn-primary"
-                        >
-                            Lưu thông tin
-                        </button>
-                    </form>
-                </div>
-            </div>
-            {inputValues.isOpen === true && (
-                <Lightbox
-                    mainSrc={inputValues.imageReview}
-                    onCloseRequest={() =>
-                        setInputValues({ ...inputValues, ["isOpen"]: false })
-                    }
-                />
-            )}
+      <div className="card mb-4">
+        <div className="card-header">
+          <i className="fas fa-table me-1" />
+          Thêm mới chi tiết sản phẩm
         </div>
-    );
+        <div className="card-body">
+          <form>
+            <div className="form-row">
+              <div className="form-group col-md-4">
+                <label htmlFor="inputEmail4">Tên loại sản phẩm</label>
+                <input
+                  type="text"
+                  value={inputValues.nameDetail}
+                  name="nameDetail"
+                  onChange={(event) => handleOnChange(event)}
+                  className="form-control"
+                  id="inputEmail4"
+                />
+              </div>
+              <div className="form-group col-md-4">
+                <label htmlFor="inputEmail4">Chiều rộng</label>
+                <input
+                  type="number"
+                  value={inputValues.width}
+                  name="width"
+                  onChange={(event) => handleOnChange(event)}
+                  className="form-control"
+                  id="inputEmail4"
+                />
+              </div>
+              <div className="form-group col-md-4">
+                <label htmlFor="inputPassword4">chiều dài</label>
+                <input
+                  type="number"
+                  value={inputValues.height}
+                  name="height"
+                  onChange={(event) => handleOnChange(event)}
+                  className="form-control"
+                  id="inputPassword4"
+                />
+              </div>
+              <div className="form-group col-md-3">
+                <label htmlFor="inputEmail4">Giá gốc</label>
+                <input
+                  type="number"
+                  value={inputValues.originalPrice}
+                  name="originalPrice"
+                  onChange={(event) => handleOnChange(event)}
+                  className="form-control"
+                  id="inputEmail4"
+                />
+              </div>
+              <div className="form-group col-md-3">
+                <label htmlFor="inputPassword4">Giá khuyến mãi</label>
+                <input
+                  type="number"
+                  value={inputValues.discountPrice}
+                  name="discountPrice"
+                  onChange={(event) => handleOnChange(event)}
+                  className="form-control"
+                  id="inputPassword4"
+                />
+              </div>
+              <div className="form-group col-md-4">
+                <label htmlFor="inputPassword4">Khối lượng</label>
+                <input
+                  type="number"
+                  value={inputValues.weight}
+                  name="weight"
+                  onChange={(event) => handleOnChange(event)}
+                  className="form-control"
+                  id="inputPassword4"
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputAddress">Mô tả chi tiết</label>
+              <textarea
+                rows="4"
+                value={inputValues.description}
+                name="description"
+                onChange={(event) => handleOnChange(event)}
+                className="form-control"
+              ></textarea>
+            </div>
+            <div className="form-row">
+              <div className="form-group col-md-4">
+                <label htmlFor="inputPassword4">Kích thước</label>
+                <select
+                  value={inputValues.sizeId}
+                  name="sizeId"
+                  onChange={(event) => handleOnChange(event)}
+                  id="inputState"
+                  className="form-control"
+                >
+                  {dataSize &&
+                    dataSize.length > 0 &&
+                    dataSize.map((item, index) => {
+                      return (
+                        <option key={index} value={item.code}>
+                          {item.value}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
+              <div className="form-group col-md-3">
+                <label htmlFor="inputPassword4">Chọn hình ảnh</label>
+                <input
+                  type="file"
+                  id="previewImg"
+                  accept=".jpg,.png"
+                  hidden
+                  onChange={(event) => handleOnChangeImage(event)}
+                />
+                <br></br>
+                <label
+                  style={{
+                    backgroundColor: "#eee",
+                    borderRadius: "5px",
+                    padding: "6px",
+                    cursor: "pointer",
+                  }}
+                  className="label-upload"
+                  htmlFor="previewImg"
+                >
+                  Tải ảnh <i className="fas fa-upload"></i>
+                </label>
+                <div
+                  style={{
+                    backgroundImage: `url(${inputValues.imageReview})`,
+                  }}
+                  onClick={() => openPreviewImage()}
+                  className="box-image"
+                ></div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleSaveProductDetail()}
+              type="button"
+              className="btn btn-primary"
+            >
+              Lưu thông tin
+            </button>
+          </form>
+        </div>
+      </div>
+      {inputValues.isOpen === true && (
+        <Lightbox
+          mainSrc={inputValues.imageReview}
+          onCloseRequest={() =>
+            setInputValues({ ...inputValues, ["isOpen"]: false })
+          }
+        />
+      )}
+    </div>
+  );
 };
 export default AddProductDetail;
