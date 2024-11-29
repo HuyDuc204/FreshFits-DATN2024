@@ -167,7 +167,14 @@ function InfoDetailProduct(props) {
               <a href="#">
                 {" "}
                 <span>Trạng thái</span> :{" "}
-                {quantity > 0 ? "Còn hàng" : "Hết hàng"}
+                <span
+                  style={{
+                    fontSize: "15px",
+                    color: quantity > 0 ? "green" : "red",
+                  }}
+                >
+                  {quantity > 0 ? "Còn hàng" : "Hết hàng !"}
+                </span>
               </a>
             </li>
             <li>
@@ -200,6 +207,7 @@ function InfoDetailProduct(props) {
               <a href="#">{quantity} sản phẩm có sẵn</a>
             </li>
           </ul>
+
           <p>{arrDetail.description}</p>
           <div style={{ display: "flex" }}>
             <div className="product_count">
