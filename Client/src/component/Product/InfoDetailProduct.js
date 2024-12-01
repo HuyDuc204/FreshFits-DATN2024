@@ -7,7 +7,7 @@ import { addItemCartStart } from "../../action/ShopCartAction";
 import "./InfoDetailProduct.scss";
 import CommonUtils from "../../utils/CommonUtils";
 import { useHistory } from "react-router-dom"; // Thêm import này
-
+import { toast } from "react-toastify";
 function InfoDetailProduct(props) {
   const history = useHistory(); // Khởi tạo useHistory
   const dispatch = useDispatch();
@@ -61,6 +61,16 @@ function InfoDetailProduct(props) {
   };
 
   const handleAddShopCart = () => {
+    if (quantityProduct < 0) {
+      toast.error("Số lượng không được là số âm!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      return;
+    }
+
+
+
     if (props.userId) {
       dispatch(
         addItemCartStart({
@@ -217,6 +227,8 @@ function InfoDetailProduct(props) {
                 value={quantityProduct}
                 onChange={(event) => setquantityProduct(event.target.value)}
                 min="1"
+
+                
               />
             </div>
             <div className="form-group">
