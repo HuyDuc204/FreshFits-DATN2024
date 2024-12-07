@@ -20,6 +20,7 @@ import {
 } from "react-router-dom";
 import "./OrderUser.scss";
 import {
+  getDetailOrder,
   getAllOrdersByUser,
   updateStatusOrderService,
 } from "../../services/userService";
@@ -28,7 +29,7 @@ import CommonUtils from "../../utils/CommonUtils";
 
 function OrderUser(props) {
   const { id } = useParams();
-  const [DataOrder, setDataOrder] = useState([]);
+  const [DataOrder, setDataOrder] = useState({});
 
   const [confirmedOrders, setConfirmedOrders] = useState(new Set()); // Thêm state để lưu trữ đơn hàng đã xác nhận
   let price = 0;
@@ -38,6 +39,7 @@ function OrderUser(props) {
 
   useEffect(() => {
     loadDataOrder();
+
     loadConfirmedOrders(); // Tải đơn hàng đã xác nhận từ local storage
   }, []);
 
@@ -68,8 +70,8 @@ function OrderUser(props) {
     }
   };
 
-  const handleCancelOrder = (order) => {
-    setSelectedOrder(order);
+  const handleCancelOrder = (order, order2) => {
+    setSelectedOrder(order, order2);
     setShowCancelModal(true);
   };
 
@@ -82,6 +84,7 @@ function OrderUser(props) {
     if (res && res.errCode === 0) {
       toast.success(`Đã hủy đơn hàng thành công. Lý do: ${reason}`);
       loadDataOrder();
+
       setShowCancelModal(false);
     }
   };
@@ -129,6 +132,7 @@ function OrderUser(props) {
               <span>Tất cả</span>
             </a>
           </div>
+
           <div className="box-search-order p-2">
             <i className="fas fa-search"></i>
             <input
@@ -137,6 +141,7 @@ function OrderUser(props) {
               type={"text"}
             />
           </div>
+
           {DataOrder &&
             DataOrder.length > 0 &&
             DataOrder.map((item, index) => {
@@ -146,7 +151,7 @@ function OrderUser(props) {
                     <div className="content-top">
                       <div className="content-left">
                         <div className="label-favorite">Yêu thích</div>
-                        <span className="label-name-shop">Eiser shop</span>
+                        <span className="label-name-shop">Fresh Fits shop</span>
                         <div className="view-shop">
                           <i className="fas fa-store"></i>
                           <a style={{ color: "black" }} href="/shop">
@@ -155,87 +160,151 @@ function OrderUser(props) {
                         </div>
                       </div>
 
-                      {/* <div className="content-right text-success bg-light p-2 rounded shadow-sm">
-                        <b
-                          style={{
-                            border: "2px solid rgba(255, 0, 0, 0.5)",
-                            borderRadius: "8px",
-                            padding: "5px 6px",
-                            color: "green",
-                          }}
-                        >
-                          <i class="fa-solid fa-check text-success me-2"></i>
-                          {item.statusOrderData &&
-                            item.statusOrderData.value}{" "}
-                          {item.isPaymentOnlien === 1 && " | Đã thanh toán"}
-                        </b>
-                      </div> */}
+                      <div className="order-status"></div>
+                    </div>
+                    <div>
+                      <div className="delivery-timeline mt-4">
+                        <div className="timeline">
+                          {/* Các bước trạng thái */}
+                          <div
+                            className={`timeline-step ${
+                              item.statusId === "S3" ? "active" : ""
+                            }`}
+                          >
+                            <i className="fa-solid fa-receipt"></i>
+                            <p>Chờ xác nhận </p>
+                          </div>
 
-                      <div className="order-status">
-                        <b
-                          style={{
-                            border: "2px solid rgba(255, 0, 0, 0.5)",
-                            borderRadius: "8px",
-                            padding: "5px 6px",
-                            color: "green",
-                          }}
-                        >
-                          <i className="fa-solid fa-check text-success me-2"></i>
-                          {item.statusOrderData && item.statusOrderData.value}{" "}
-                          {item.isPaymentOnlien === 1 && " "}
-                        </b>
+                          <div
+                            className={`timeline-connector ${
+                              item.statusId !== "S3" ? "active" : ""
+                            }`}
+                          ></div>
 
-                      {/* Thêm thanh trạng thái giao hàng tại đây */}
-<div className="delivery-status mt-4">
-  <div className="text-center">
-    {/* Chờ lấy hàng */}
-    {item.statusId === "S4" && (
-      <div className="status-item">
-        <Progress value={20} className="mt-2" color="warning" />
-        <div className="mt-2 text-warning">
-          <i className="fas fa-clock"></i>
-          <div>Chờ lấy hàng</div>
-        </div>
-      </div>
-    )}
+                          <div
+                            className={`timeline-step ${
+                              item.statusId === "S4" ? "active" : ""
+                            }`}
+                          >
+                            <i className="fa-solid fa-dollar-sign"></i>
+                            <p>Chờ lấy hàng</p>
+                          </div>
 
-    {/* Chờ xác nhận */}
-    {item.statusId === "S3" && (
-      <div className="status-item">
-        <Progress value={40} className="mt-2" color="info" />
-        <div className="mt-2 text-info">
-          <i className="fas fa-check-circle"></i>
-          <div>Chờ xác nhận</div>
-        </div>
-      </div>
-    )}
+                          <div
+                            className={`timeline-connector ${
+                              item.statusId !== "S3" && item.statusId !== "S2"
+                                ? "active"
+                                : ""
+                            }`}
+                          ></div>
 
-    {/* Đang giao hàng */}
-    {item.statusId === "S5" && (
-      <div className="status-item">
-        <Progress value={60} className="mt-2" color="primary" />
-        <div className="mt-2 text-primary">
-          <i className="fas fa-truck"></i>
-          <div>Đang giao hàng</div>
-        </div>
-      </div>
-    )}
+                          <div
+                            className={`timeline-step ${
+                              item.statusId === "S5" ? "active" : ""
+                            }`}
+                          >
+                            <i className="fa-solid fa-truck"></i>
+                            <p>Đang giao hàng</p>
+                          </div>
 
-    {/* Đã giao hàng */}
-    {(item.statusId === "S8" || item.statusId === "S6") && (
-      <div className="status-item">
-        <Progress value={100} className="mt-2" color="success" />
-        <div className="mt-2 text-success">
-          <i className="fas fa-check-circle"></i>
-          <div>Đã giao hàng</div>
-        </div>
-      </div>
-    )}
-  </div>
-</div>
-{/* Kết thúc thanh trạng thái */}
+                          <div
+                            className={`timeline-connector ${
+                              item.statusId !== "S3" &&
+                              item.statusId !== "S4" &&
+                              item.statusId !== "S5"
+                                ? "active"
+                                : ""
+                            }`}
+                          ></div>
 
+                          <div
+                            className={`timeline-step ${
+                              item.statusId === "S8" ? "active" : ""
+                            }`}
+                          >
+                            <i className="fa-solid fa-box"></i>
+                            <p>Đã giao hàng</p>
+                          </div>
+
+                          <div
+                            className={`timeline-connector ${
+                              item.statusId === "S6" ? "active" : ""
+                            }`}
+                          ></div>
+
+                          <div
+                            className={`timeline-step ${
+                              item.statusId === "S6" ? "active" : ""
+                            }`}
+                          >
+                            <i className="fa-solid fa-check-circle"></i>
+                            <p>Hoàn thành</p>
+                          </div>
+                        </div>
                       </div>
+                    </div>
+                    {/* Thêm thanh trạng thái giao hàng tại đây */}
+
+                    <div className="content-top">
+                      <div
+                        className="d-flex justify-content-between"
+                        style={{ width: "100%" }}
+                      >
+                        <div className="content-left">
+                          <div
+                            style={{
+                              marginBottom: "10px",
+                              fontWeight: "bold",
+                              fontSize: "20px",
+                            }}
+                          >
+                            {/* Chờ lấy hàng */}
+                            {item.statusId === "S7" && (
+                              <div className="status-item">
+                                <div className="mt-2 text-danger d-flex align-items-center ">
+                                  <i className="me-2 fas fa-clock"> </i>
+                                  <div>Đã huỷ đơn</div>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Chờ xác nhận */}
+                            {item.statusId === "S9" && (
+                              <div className="status-item">
+                                <div className="mt-2 text-warning d-flex align-items-center ">
+                                  <i className="me-2 fas fa-check-circle"> </i>
+                                  <div>Chưa nhận được hàng</div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div
+                          className="wrap-content-address"
+                          style={{ textAlign: "right" }}
+                        >
+                          <div className="content-up">
+                            <div className="content-left">
+                              <td>
+                                <Link
+                                  style={{
+                                    fontSize: "17px",
+                                    fontWeight: "bold",
+                                    marginTop: "8px",
+                                  }}
+                                  to={`/user/userdetail/${item.id}`}
+                                >
+                                  <i className="me-2 fas fa-map-marker-alt"></i>
+                                  Xem chi tiết đơn hàng
+                                </Link>
+                              </td>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="order-status"></div>
                     </div>
                     {item.orderDetail &&
                       item.orderDetail.length > 0 &&
@@ -314,7 +383,7 @@ function OrderUser(props) {
                             className="btn-buy"
                             onClick={() => handleReceivedOrder3(item.id)}
                           >
-                            Xác nhận đã nhận hàng
+                            Đã nhận hàng
                           </div>
                           {item.statusId === "S8" &&
                             (item.isPaymentOnlien === 0 ||
@@ -323,7 +392,7 @@ function OrderUser(props) {
                                 className="btn-buy"
                                 onClick={() => handleCancelOrder2(item)}
                               >
-                                Chưa nhận
+                                Chưa nhận được hàng
                               </div>
                             )}
                         </>

@@ -31,6 +31,7 @@ function DetailOrder(props) {
 
   let price = 0;
   const [priceShip, setpriceShip] = useState(0);
+
   useEffect(() => {
     loadDataOrder();
   }, []);
@@ -39,6 +40,7 @@ function DetailOrder(props) {
     setimgPreview(url);
     setisOpen(true);
   };
+
   let loadDataOrder = () => {
     if (id) {
       let fetchOrder = async () => {
@@ -51,6 +53,7 @@ function DetailOrder(props) {
       fetchOrder();
     }
   };
+
   let totalPriceDiscount = (price, discount) => {
     try {
       if (discount.typeVoucherOfVoucherData.typeVoucher === "percent") {
@@ -215,12 +218,13 @@ function DetailOrder(props) {
                 <div>
                   {DataOrder && DataOrder.typeShipData && (
                     <label className="form-check-label">
-                      {DataOrder.typeShipData.type}: {" "}
+                      {DataOrder.typeShipData.type}:{" "}
                       {CommonUtils.formatter.format(
                         DataOrder.typeShipData.price
                       )}{" "}
                     </label>
-                  )} VNĐ
+                  )}{" "}
+                  VNĐ
                 </div>
               </div>
               <div className="box-shopcart-bottom">
@@ -266,7 +270,8 @@ function DetailOrder(props) {
                             totalPriceDiscount(price, DataOrder.voucherData) +
                               priceShip
                           )
-                        : CommonUtils.formatter.format(price + +priceShip)} VNĐ
+                        : CommonUtils.formatter.format(price + +priceShip)}{" "}
+                      VNĐ
                     </span>
                   </div>
                 </div>
@@ -275,94 +280,134 @@ function DetailOrder(props) {
           </section>
         </div>
         <div className="wrap-payment">
-          <div className="content-top" style={{ display: "flex", gap: "10px" }}>
+          <div className="content-top" style={{ display: "flex" }}>
             <span>Phương Thức Thanh Toán</span>
-
-            <div className="content-right text-success bg-light p-2 rounded shadow-sm">
-              <b
-                style={{
-                  border: "2px solid rgba(255, 0, 0, 0.5)",
-                  borderRadius: "8px",
-                  padding: "5px 6px",
-                  color: "#00bfff",
-                }}
+            <div className="card-body">
+              <span
+                className={`badge ${
+                  DataOrder.isPaymentOnlien === 0 ? "bg-danger" : "bg-success"
+                }`}
               >
-                <i class="fa-brands fa-amazon-pay me-2"></i>
-                {DataOrder.isPaymentOnlien == 0
+                <i
+                  className={`fa ${
+                    DataOrder.isPaymentOnlien === 0
+                      ? "fa-money-bill-wave"
+                      : "fa-credit-card"
+                  } me-2`}
+                ></i>
+                {DataOrder.isPaymentOnlien === 0
                   ? "Thanh toán tiền mặt"
                   : "Thanh toán Online"}
-              </b>
+              </span>
             </div>
           </div>
-          <div className="content-top" style={{ display: "flex", gap: "10px" }}>
+          <div className="content-top" style={{ gap: "10px" }}>
             <span>Trạng Thái Đơn Hàng</span>
 
-            <div className="content-right text-success bg-light p-2 rounded shadow-sm">
-              <b
-                style={{
-                  border: "2px solid rgba(255, 0, 0, 0.5)",
-                  borderRadius: "8px",
-                  padding: "5px 6px",
-                  color: "green",
-                }}
-              >
-                <i class="fa-solid fa-check text-success me-2"></i>
-                <span>
-                  {DataOrder.statusOrderData && DataOrder.statusOrderData.value}
-                </span>
-              </b>
+            <b>
+              {/* Chờ lấy hàng */}
+              {DataOrder.statusId === "S7" && (
+                <div className="status-item">
+                  <div className="mt-2 text-danger d-flex align-items-center ">
+                    <i className="me-2 fas fa-clock"> </i>
+                    <div>Huỷ đơn</div>
+                  </div>
+                </div>
+              )}
 
-              {/* Thêm thanh trạng thái giao hàng tại đây */}
-              <div className="delivery-status mt-4">
-                <div className="text-center">
-                  {/* Chờ lấy hàng */}
-                  {DataOrder.statusId === "S4" && (
-                    <div className="status-item">
-                      <Progress value={20} className="mt-2" color="warning" />
-                      <div className="mt-2 text-warning">
-                        <i className="fas fa-clock"></i>
-                        <div>Chờ lấy hàng</div>
-                      </div>
-                    </div>
-                  )}
+              {/* Chờ xác nhận */}
+              {DataOrder.statusId === "S9" && (
+                <div className="status-item">
+                  <div className="mt-2 text-warning d-flex align-items-center ">
+                    <i className="me-2 fas fa-check-circle"> </i>
+                    <div>Chưa nhận được hàng</div>
+                  </div>
+                </div>
+              )}
+            </b>
 
-                  {/* Chờ xác nhận */}
-                  {DataOrder.statusId === "S3" && (
-                    <div className="status-item">
-                      <Progress value={40} className="mt-2" color="info" />
-                      <div className="mt-2 text-info">
-                        <i className="fas fa-check-circle"></i>
-                        <div>Chờ xác nhận</div>
-                      </div>
-                    </div>
-                  )}
+            {/* Thêm thanh trạng thái giao hàng tại đây */}
 
-                  {/* Đang giao hàng */}
-                  {DataOrder.statusId === "S5" && (
-                    <div className="status-item">
-                      <Progress value={60} className="mt-2" color="primary" />
-                      <div className="mt-2 text-primary">
-                        <i className="fas fa-truck"></i>
-                        <div>Đang giao hàng</div>
-                      </div>
-                    </div>
-                  )}
+            <div className="delivery-timeline mt-4">
+              <div className="timeline">
+                {/* Các bước trạng thái */}
+                <div
+                  className={`timeline-step ${
+                    DataOrder.statusId === "S3" ? "active" : ""
+                  }`}
+                >
+                  <i className="fa-solid fa-receipt"></i>
+                  <p>Chờ xác nhận </p>
+                </div>
 
-                  {/* Đã giao hàng */}
-                  {(DataOrder.statusId === "S8" ||
-                    DataOrder.statusId === "S6") && (
-                    <div className="status-item">
-                      <Progress value={100} className="mt-2" color="success" />
-                      <div className="mt-2 text-success">
-                        <i className="fas fa-check-circle"></i>
-                        <div>Đã giao hàng</div>
-                      </div>
-                    </div>
-                  )}
+                <div
+                  className={`timeline-connector ${
+                    DataOrder.statusId !== "S3" ? "active" : ""
+                  }`}
+                ></div>
+
+                <div
+                  className={`timeline-step ${
+                    DataOrder.statusId === "S4" ? "active" : ""
+                  }`}
+                >
+                  <i className="fa-solid fa-dollar-sign"></i>
+                  <p>Chờ lấy hàng</p>
+                </div>
+
+                <div
+                  className={`timeline-connector ${
+                    DataOrder.statusId !== "S3" && DataOrder.statusId !== "S2"
+                      ? "active"
+                      : ""
+                  }`}
+                ></div>
+
+                <div
+                  className={`timeline-step ${
+                    DataOrder.statusId === "S5" ? "active" : ""
+                  }`}
+                >
+                  <i className="fa-solid fa-truck"></i>
+                  <p>Đang giao hàng</p>
+                </div>
+
+                <div
+                  className={`timeline-connector ${
+                    DataOrder.statusId !== "S3" &&
+                    DataOrder.statusId !== "S4" &&
+                    DataOrder.statusId !== "S5"
+                      ? "active"
+                      : ""
+                  }`}
+                ></div>
+
+                <div
+                  className={`timeline-step ${
+                    DataOrder.statusId === "S8" ? "active" : ""
+                  }`}
+                >
+                  <i className="fa-solid fa-box"></i>
+                  <p>Đã giao hàng</p>
+                </div>
+
+                <div
+                  className={`timeline-connector ${
+                    DataOrder.statusId === "S6" ? "active" : ""
+                  }`}
+                ></div>
+
+                <div
+                  className={`timeline-step ${
+                    DataOrder.statusId === "S6" ? "active" : ""
+                  }`}
+                >
+                  <i className="fa-solid fa-check-circle"></i>
+                  <p>Hoàn thành</p>
                 </div>
               </div>
-              {/* Kết thúc thanh trạng thái */}
             </div>
+            {/* Kết thúc thanh trạng thái */}
           </div>
           <div className="content-top" style={{ display: "flex", gap: "10px" }}>
             <span>Hình ảnh giao hàng</span>
