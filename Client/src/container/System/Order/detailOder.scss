@@ -1,0 +1,48 @@
+
+.delivery-timeline .timeline {
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 0;
+  }
+  
+  .timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    position: relative;
+    color: #aaa;
+  }
+  
+  .timeline-step.active {
+    color: green;
+  }
+  
+  .timeline-step i {
+    font-size: 24px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 50%;
+    margin-bottom: 8px;
+    border: 2px solid #ccc;
+  }
+  
+  .timeline-step.active i {
+    background-color: green;
+    color: white;
+    border-color: green;
+  }
+  
+  .timeline-connector {
+    height: 4px;
+    flex: 1;
+    background-color: #ccc;
+    margin-top: -15px;
+  }
+  
+  .timeline-connector.active {
+    background-color: green;
+  }
+  
